@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kaptan Yangın</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stil.css">
+<link rel="stylesheet" href="deneme/kayan-kartlar.css"><!-- DENEME -->
+<script src="tema.js"></script>
+</head>
+<body data-sayfa="ana">
+
+
+<main>
+  <!-- 01 Açılış: plan → geçiş → bina -->
+  <section class="sahne acilis" id="acilis" data-unsur="insaat" data-sahne="acilis" style="--uzun:330">
+    <div class="sabit" data-video="video/acilis">
+      <canvas class="video-tuval"></canvas>
+      <img class="kat" src="gorsel/I01-plan.jpg" style="--odak:64% 50%" alt="">
+      <img class="kat" src="gorsel/I02-gecis.jpg" style="--odak:86% 50%" alt="">
+      <img class="kat" src="gorsel/I03-bina.jpg" style="--odak:86% 45%" alt="">
+      <div class="perde sol-koyu"></div><div class="perde sol-acik" style="opacity:0"></div>
+      <div class="metin">
+        <div class="adimlar">
+          <div class="adim acik"><p class="etiket">Kaptan · 2019'dan beri</p><h1 class="dev bol">Her bina bir çizgiyle başlar.</h1></div>
+          <div class="adim"><p class="etiket">01 · İnşaat</p><h1 class="dev bol">Çizgi, binaya dönüşür.</h1></div>
+          <div class="adim"><p class="etiket">01 · İnşaat</p><h1 class="dev bol">İçindeki güvenliği biz kurarız.</h1>
+            <p class="giris">İnşaat, yangın güvenliği, kantar ve terazi. Antalya'da kurumlara tek elden hizmet.</p>
+            <a class="dugme kirmizi" href="#iletisim">Teklif al</a></div>
+        </div>
+      </div>
+      <div class="kaydir">Kaydır</div>
+    </div>
+  </section>
+
+  <!-- Kesinti 1: Biz kimiz -->
+  <section class="kesinti" id="biz" data-unsur="insaat">
+    <div class="kapak"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
+    <div class="ic">
+      <div class="ortali"><p class="etiket">Biz kimiz</p><h2 class="baslik bol" style="margin-top:22px">İlk çizgiden son tüpe,<br>tek elden.</h2>
+        <p class="giris">Otellerden hastanelere, belediye binalarından fabrikalara; projeyi çizer, yangın güvenliğini kurar, kantarı ve teraziyi ayarlarız. Kurulum da bakım da bizde.</p>
+        <a class="katalog-bag" href="hakkimizda.html" style="margin-top:26px">Hakkımızda ↗</a></div>
+      <div class="gercekler subeli">
+        <div><b>İstanbul</b><span>Fatih · Merkez</span></div>
+        <div><b>Antalya</b><span>Finike · Şube</span></div>
+      </div>
+      <div class="panolar">
+        <a class="hp" href="#acilis" style="--odak:84% 50%"><img src="gorsel/I03-bina.jpg" alt="" loading="lazy">
+          <div class="hp-ust"><span class="hp-no">01</span><span class="hp-tur">İnşaat</span></div>
+          <div class="hp-alt"><h3>Projeden anahtar teslime</h3>
+            <div class="hp-acik"><div><p>Mimari proje, statik ve uygulama; binayı içindeki güvenlik sistemleriyle birlikte düşünürüz.</p>
+              <div class="hp-cip"><span>Mimari proje</span><span>Statik</span><span>Uygulama</span></div></div></div></div>
+          <span class="hp-ok" aria-hidden="true">↗</span></a>
+        <a class="hp" href="#tup" style="--odak:70% 50%"><img src="gorsel/I08-dolap.jpg" alt="" loading="lazy">
+          <div class="hp-ust"><span class="hp-no">02</span><span class="hp-tur">Yangın</span></div>
+          <div class="hp-alt"><h3>Algılamadan söndürmeye</h3>
+            <div class="hp-acik"><div><p>Buton, dedektör, sprinkler, pano, dolap, kapı ve tüp: projelendirme, montaj, dolum ve bakım.</p>
+              <div class="hp-cip"><span>Algılama</span><span>Söndürme</span><span>Bakım</span></div></div></div></div>
+          <span class="hp-ok" aria-hidden="true">↗</span></a>
+        <a class="hp" href="#kantar" style="--odak:70% 55%"><img src="gorsel/I14-kantar-hava.jpg" alt="" loading="lazy">
+          <div class="hp-ust"><span class="hp-no">03</span><span class="hp-tur">Kantar</span></div>
+          <div class="hp-alt"><h3>Kurulumdan kalibrasyona</h3>
+            <div class="hp-acik"><div><p>Kamyon, hal ve platform kantarından hassas teraziye: satış, kurulum ve periyodik kalibrasyon.</p>
+              <div class="hp-cip"><span>Kantar</span><span>Terazi</span><span>Kalibrasyon</span></div></div></div></div>
+          <span class="hp-ok" aria-hidden="true">↗</span></a>
+      </div>
+      <div class="ref-blok" id="kurumlar">
+        <div class="ortali"><p class="etiket">Referanslar</p><h2 class="ara-baslik bol" style="margin-top:18px">Bize güvenen kurumlar</h2></div>
+        <div class="marka-izgara" data-izgara="kurum"></div>
+      </div>
+    </div>
+    <div class="kapak dip"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
+  </section>
+
+  <!-- 02 Yangın: algılamadan söndürmeye (kaydırmayla oynayan sahne; video gelince kareler) -->
+  <section class="sahne yangin" id="yangin" hidden data-unsur="yangin" data-sahne="yangin" style="--uzun:1150">
+    <div class="sabit" data-video-kapali="video/yangin"><!-- video geçici kapalı (2026-10-14): durak görselleri yumuşak geçişle -->
+      <div id="yangin-katlar"></div>
+      <canvas class="video-tuval"></canvas>
+      <div class="perde sol-acik"></div><div class="perde sag-acik"></div><div class="perde ust-acik"></div>
+      <img class="tek-tup" id="gecis-tup" src="urun/tup/kkt-6kg.webp" alt="">
+      <div class="metin"><div class="adimlar" id="yangin-metin"></div></div>
+      <div class="ray" id="ray"></div>
+      <div class="sayac" id="sayac"></div>
+    </div>
+  </section>
+
+  <!-- 02b Hizmet verdiğimiz kurumlar: tüp sahnede kayar, mekân değişir -->
+  <section class="sahne tup" id="tup" data-unsur="yangin" data-sahne="tup" style="--uzun:820">
+    <div class="sabit">
+      <div id="mekanlar"></div>
+      <div class="perde sol-acik"></div>
+      <img class="tek-tup" id="tek-tup" src="urun/tup/kkt-6kg.webp" alt="6 kg KKT yangın söndürücü">
+      <div class="metin" id="kurum-metin">
+        <p class="etiket">02 · Hizmet verdiğimiz kurumlar</p>
+        <div class="adimlar" id="mekan-metin" style="margin-top:20px"></div>
+      </div>
+      <div class="mekan-liste" id="mekan-liste"></div>
+    </div>
+  </section>
+
+  <!-- 03 Kantar: fabrikanın içinden kapısına (video gelince kareler) -->
+  <section class="sahne kantar" id="kantar" data-unsur="kantar" data-sahne="kantar" style="--uzun:800">
+    <div class="sabit" data-video="video/kantar">
+      <canvas class="video-tuval"></canvas>
+      <div id="kantar-katlar"></div>
+      <div class="perde sol-acik"></div>
+      <div class="metin"><div class="adimlar" id="kantar-metin"></div></div>
+      <div class="kantar-liste" id="kantar-liste"></div>
+    </div>
+  </section>
+
+  <!-- Neden Kaptan: solda maddeler (kaydırdıkça kelime kelime renklenir), sağda yapışkan panel (Terminal "YOS" düzeni) -->
+  <section class="kesinti neden" id="neden" data-unsur="yangin">
+    <div class="kapak"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
+    <div class="ic">
+      <div class="ortali"><p class="etiket">Neden Kaptan</p><h2 class="baslik bol" style="margin-top:22px">Kurduğumuz her sistemin<br>arkasındayız.</h2>
+        <p class="giris">Kurulumla bitmez: bakım, dolum, kontrol ve kalibrasyonla sistemin ömrü boyunca yanınızdayız.</p></div>
+      <div class="neden-ic">
+        <div class="maddeler" id="maddeler"></div>
+        <div class="panel-kap"><div class="panel" id="panel" aria-hidden="true"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DENEME (çıkarılabilir): yana kayan kartlar. Kaldırmak için bu satırı ve <head>/sondaki "deneme/kayan-kartlar" satırlarını sil. -->
+  <section class="kesinti deneme-kartlar" id="deneme-kartlar" data-unsur="yangin"></section>
+
+  <!-- Kesinti 3: önce bayilikler, sonra mağaza önizlemesi -->
+  <section class="kesinti gri magaza-kap" id="urunler" data-unsur="yangin">
+    <div class="kapak"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
+    <div class="ic">
+      <div class="ortali"><p class="etiket">Bayilikler</p><h2 class="ara-baslik bol" style="margin-top:18px">Bayisi olduğumuz markalar</h2></div>
+      <div class="marka-izgara" data-izgara="bayi"></div>
+      <div class="magaza-onizleme">
+        <div class="urun-ust">
+          <div><p class="etiket">Mağaza</p><h2 class="baslik bol" style="margin-top:22px">Ürünlerimize ulaşın</h2>
+            <p class="giris" style="margin-top:18px;max-width:560px">Söndürücüden teraziye 69 ürün. Çeşidini seç, boyunu seç, fiyatını WhatsApp'tan tek dokunuşla sor.</p></div>
+          <div class="baglar"><a class="dugme koyu-d" href="magaza/index.html">Ürünlere git →</a></div>
+        </div>
+        <div class="panolar cesit-panolar" id="cesitler"></div>
+        <div class="oneler-bas"><h3 class="ara-baslik">Öne çıkanlar</h3><a class="katalog-bag" href="magaza/index.html">Hepsini gör →</a></div>
+        <div class="urunler oneler" id="oneler"></div>
+      </div>
+    </div>
+    <div class="kapak dip"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
+  </section>
+
+  <!-- Kapanış: sahil yolunda servis aracı -->
+  <section class="sahne son" id="iletisim" data-unsur="yangin" data-sahne="son" style="--uzun:200">
+    <div class="sabit">
+      <img class="kat" src="gorsel/I17-iletisim.jpg" style="--odak:98% 70%" alt="">
+      <div class="perde"></div>
+      <div class="kolon">
+      <div class="metin">
+        <p class="etiket">İletişim</p>
+        <h2 class="baslik bol" style="margin-top:20px">Bir telefon<br>uzağınızdayız.</h2>
+        <p class="giris gizle-tel gizle-kisa" style="margin-top:18px;max-width:640px">Keşif, teklif ya da bakım için yazın; en kısa sürede dönelim.</p>
+        <div class="iletisim-bilgi"><span><em>Telefon</em>0533 407 75 57</span><span><em>E-posta</em>info@kaptanyangin.com</span><span class="gizle-tel"><em>Adres</em>Samatya, Fatih / İstanbul</span></div>
+        <div class="hizli"><a class="dugme beyaz" href="tel:+905334077557">Ara</a><a class="dugme kirmizi" data-wa="Merhaba, teklif almak istiyorum." href="#">WhatsApp'tan yaz</a></div>
+      </div>
+      <form class="form" id="form">
+        <div class="form-bas"><h3>Teklif iste</h3>
+          <div class="konu" id="konu" role="group" aria-label="Konu"><button type="button" class="on">Yangın</button><button type="button">Kantar</button><button type="button">İnşaat</button><button type="button">Diğer</button></div></div>
+        <div class="form-iki"><label><span>Ad soyad</span><input name="ad" autocomplete="name" placeholder="Adınız"></label>
+          <label><span>Telefon</span><input name="tel" inputmode="tel" autocomplete="tel" placeholder="05__ ___ __ __"></label></div>
+        <label class="gizle-kisa"><span>Mesaj</span><textarea name="mesaj" placeholder="Kısaca ihtiyacınız: bina tipi, adet, yer…"></textarea></label>
+        <div class="form-son"><button class="dugme kirmizi gonder" type="submit">WhatsApp'tan gönder <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <a class="form-ara" href="tel:+905334077557"><em>ya da arayın</em>0533 407 75 57</a></div>
+      </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="katalog.js"></script>
+<script src="ortak.js"></script>
+<script src="ankraj.js"></script>
+<script src="sahne.js"></script>
+<script src="magaza.js"></script>
+<script src="deneme/kayan-kartlar.js"></script><!-- DENEME -->
+</body>
+</html>

@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180"><ellipse cx="120" cy="152" rx="76" ry="9" fill="#000" opacity=".18"/>
+<rect x="60" y="112" width="120" height="34" rx="8" fill="#e3e6eb"/><rect x="72" y="118" width="44" height="12" rx="2" fill="#0d3b2a"/><text x="113" y="127.5" font-family="monospace" font-size="8" fill="#43f59a" text-anchor="end">0.52g</text>
+<path d="M76 110 L76 44 Q76 36 84 36 L156 36 Q164 36 164 44 L164 110Z" fill="#cfe8ff" opacity=".45" stroke="#9fb4c9" stroke-width="2"/>
+<rect x="104" y="96" width="32" height="4" rx="2" fill="#8a94a3"/><rect x="116" y="100" width="8" height="10" fill="#8a94a3"/></svg>

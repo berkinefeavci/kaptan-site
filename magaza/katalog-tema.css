@@ -1,0 +1,21 @@
+/* Ürünler (katalog) renk temaları: sitede seçilen tema (kaptan-demo-tema) kataloğun belirteçlerini ezer. Lacivert = kataloğun kendi hali;
+   sitenin varsayılan teması (kırmızı) da lacivert gösterilir (Berkin 2026-10-11: ürünler sayfası lacivert katalog olsun). */
+html[data-tema="turuncu"], html[data-tema="durumsal"] {
+  color-scheme: light;
+  --zemin: #f3f2ef; --zemin-ust: #ffffff; --yuzey: rgb(17 26 37 / .045); --yuzey-2: rgb(17 26 37 / .08);
+  --yazi: #111a25; --yazi-2: rgb(17 26 37 / .7); --yazi-3: rgb(17 26 37 / .46); --cizgi: rgb(17 26 37 / .12);
+  --buz: #111a25; --buz-koyu: #4a5562; --kirmizi: #d3262d; --tabak: #ecebe7; --tabak-2: #dcd9d3; --murekkep: #ffffff;
+  --orta-zemin: #f6f5f2;
+}
+html[data-tema="turuncu"] {
+  --zemin: #f3f5f8; --orta-zemin: #f6f8fb; --yazi: #0f2140; --yazi-2: rgb(15 33 64 / .7); --yazi-3: rgb(15 33 64 / .46);
+  --cizgi: rgb(15 33 64 / .12); --yuzey: rgb(15 33 64 / .045); --yuzey-2: rgb(15 33 64 / .08);
+  --buz: #16345c; --buz-koyu: #4a5a74; --kirmizi: #e8591a;
+}
+html[data-tema="grafit"] {
+  --zemin: #111214; --zemin-ust: #26282c; --orta-zemin: #18191c; --yuzey: rgb(242 242 240 / .06); --yuzey-2: rgb(242 242 240 / .1);
+  --yazi: #f2f2f0; --yazi-2: rgb(242 242 240 / .7); --yazi-3: rgb(242 242 240 / .45); --cizgi: rgb(242 242 240 / .12);
+  --buz: #e4e5e7; --buz-koyu: #a9acb1; --kirmizi: #e5392b; --murekkep: #17181b;
+}
+html[data-tema="durumsal"][data-unsur="kantar"] { --kirmizi: #16345c; --buz: #16345c; }
+html[data-tema]:not([data-tema="lacivert"]):not([data-tema="kirmizi"]) body { background: radial-gradient(120% 620px at 60% 240px, var(--zemin-ust) 0%, var(--orta-zemin) 48%, var(--zemin) 100%) no-repeat, var(--zemin); }

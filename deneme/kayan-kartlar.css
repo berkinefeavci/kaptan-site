@@ -1,0 +1,44 @@
+/* DENEME — yana kayan kartlar (kayan-kartlar.js). Çıkarmak için index.html'deki iki satırı ve bölümü sil. */
+.deneme-kartlar { --kk-ac: 46; --kk-kp: 29; padding-top: clamp(40px, 6vw, 80px); overflow: hidden; }
+.kk-ust { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: clamp(36px, 5vw, 64px); }
+.kk-sekmeler { display: flex; flex-wrap: wrap; gap: 8px; }
+.kk-sekmeler button, .kk-oklar button { height: 44px; padding: 0 16px; border-radius: 6px; box-shadow: inset 0 0 0 1px rgba(var(--ink-rgb), .16); font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--ink-3); transition: background .3s, color .3s, box-shadow .3s; }
+.kk-sekmeler button[aria-selected="true"] { background: rgba(var(--ink-rgb), .07); box-shadow: none; color: var(--ink); }
+.kk-oklar { display: flex; gap: 8px; }
+.kk-oklar button { width: 46px; padding: 0; font: 400 22px/1 var(--yazi); letter-spacing: 0; color: var(--ink); }
+.kk-oklar button:hover { background: rgba(var(--ink-rgb), .07); }
+.kk-pencere { margin-top: 32px; }
+.kk-ray { display: flex; gap: 16px; transition: transform .8s var(--egri); will-change: transform; }
+.kk-kart { position: relative; flex: 0 0 calc(var(--kk-kp) * 1%); height: clamp(440px, 58vh, 600px); border-radius: 12px; overflow: hidden; isolation: isolate; color: #fff; cursor: pointer; transition: flex-basis .8s var(--egri);
+  -webkit-mask: linear-gradient(#000 0 0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 100' preserveAspectRatio='none'%3E%3Cpath d='M16 0L0 10V90L16 100Z'/%3E%3C/svg%3E") right center / 16px 38% no-repeat; -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 100' preserveAspectRatio='none'%3E%3Cpath d='M16 0L0 10V90L16 100Z'/%3E%3C/svg%3E") right center / 16px 38% no-repeat; mask-composite: exclude; }
+.kk-kart.acik { flex-basis: calc(var(--kk-ac) * 1%); cursor: default; }
+.kk-kart img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: filter .8s, transform 1.2s var(--egri); }
+.kk-kart::before { content: ""; position: absolute; inset: 0; z-index: -1; transition: opacity .6s; }
+.kk-kart.vurgu::before { background: var(--vurgu); }
+.kk-kart.gece::before { background: var(--gece); }
+.kk-kart.gri::before { background: #c9c8c4; }
+.kk-kart.gri { color: #111a25; }
+.kk-kart:not(.acik):hover::before { opacity: 0; }
+.kk-kart:not(.acik):hover { color: #fff; }
+.kk-kart:not(.acik):hover img { transform: none; }
+.kk-kart::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(9, 16, 26, .5), rgba(9, 16, 26, .08) 45%, rgba(9, 16, 26, .35)); opacity: 0; transition: opacity .6s; }
+.kk-kart:not(.acik):hover::after { opacity: 1; }
+.kk-kart.acik::before { opacity: 0; }
+.kk-kart.acik img { filter: blur(14px) brightness(.62) saturate(1.1); transform: scale(1.12); }
+.kk-kart.acik { color: #fff; }
+.kk-yazi { position: absolute; left: clamp(22px, 3vw, 46px); right: clamp(22px, 3vw, 46px); top: clamp(26px, 4vw, 62px); }
+.kk-etiket { font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; opacity: .78; }
+.kk-kart h3 { margin-top: 14px; max-width: 16ch; font-weight: 500; font-size: clamp(26px, 2.5vw, 42px); line-height: 1.08; letter-spacing: -.03em; }
+.kk-ac { margin-top: 24px; max-width: 34ch; font-size: clamp(16px, 1.25vw, 20px); line-height: 1.5; opacity: 0; transform: translateY(12px); transition: opacity .5s, transform .7s var(--egri); }
+.kk-kart.acik .kk-ac { opacity: .92; transform: none; transition-delay: .25s; }
+.kk-dugme { position: absolute; right: clamp(22px, 4vw, 64px); bottom: clamp(22px, 2.6vw, 40px); display: grid; place-items: center; width: 164px; height: 48px; border-radius: 6px; background: #f3f2ef; color: #111a25; font: 500 11px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; opacity: 0; pointer-events: none; transition: opacity .5s; }
+.kk-kart.acik .kk-dugme { opacity: 1; pointer-events: auto; transition-delay: .3s; }
+@media (max-width: 820px) {
+  .kk-ust { flex-direction: column; align-items: stretch; }
+  .kk-sekmeler { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  .kk-sekmeler button { flex: none; }
+  .kk-oklar { display: none; }
+  .deneme-kartlar { --kk-ac: 86; --kk-kp: 70; }
+  .kk-kart { height: 440px; }
+}

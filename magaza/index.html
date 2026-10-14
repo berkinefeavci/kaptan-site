@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="tr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kaptan Katalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@200;300;400;500&family=Geist:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="katalog-tema.css">
+<script src="../tema.js"></script>
+<script src="../katalog.js"></script>
+<script>window.KANTAR_IDS = KATALOG.bolumler.filter(function(b){return b.kategori==="kantar"}).flatMap(function(b){return b.urunler.map(function(u){return u.id})});</script>
+<script>/* durumsal: kataloğun bölümüne göre renk */
+(function(){ var k=["kantar"]; function b(){ var h=location.hash.slice(1); document.documentElement.dataset.unsur = h==="kantar" ? "kantar" : (/^u-\d+$/.test(h) && window.KANTAR_IDS && KANTAR_IDS.indexOf(+h.slice(2))>-1 ? "kantar" : "yangin"); } addEventListener("hashchange", b); b(); })();</script>
+<style>
+/* Lacivert sahne, telefon öncelikli. Liste: dev başlık + cam sekme + raf kartları. Ürün: dev yazıların arasından geçen ürün, boylar ray üstünde kayar. */
+:root {
+	color-scheme: dark;
+	--zemin: #040913; --zemin-ust: #10223e; --yuzey: rgb(160 190 235 / 0.07); --yuzey-2: rgb(160 190 235 / 0.12);
+	--yazi: #eef2f8; --yazi-2: rgb(222 231 244 / 0.7); --yazi-3: rgb(222 231 244 / 0.45); --cizgi: rgb(200 220 255 / 0.12);
+	--buz: #c6d8f0; --buz-koyu: #8fb3e0; --kirmizi: #e5392b; --tabak: #e8eef7; --tabak-2: #c9d6e8; --murekkep: #0b1a30;
+	--baslik: "Urbanist", "Geist", system-ui, sans-serif; --govde: "Geist", system-ui, sans-serif;
+	--yay: cubic-bezier(0.16, 1, 0.3, 1); --egri: cubic-bezier(0.22, 0.8, 0.22, 1);
+	--kenar: 16px; --en: 1320px;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; scrollbar-width: none; }
+*::-webkit-scrollbar { display: none; }
+html { background: var(--zemin); }
+[hidden] { display: none !important; }
+body { margin: 0; color: var(--yazi); font: 15px/1.5 var(--govde); -webkit-font-smoothing: antialiased; overflow-x: hidden; min-height: 100vh;
+	background: radial-gradient(120% 620px at 60% 240px, var(--zemin-ust) 0%, #08142a 48%, var(--zemin) 100%) no-repeat, var(--zemin); }
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
+button { cursor: pointer; }
+.ti { display: inline-grid; place-items: center; font-style: normal; }
+.ti svg { width: 1em; height: 1em; display: block; }
+:focus-visible { outline: 2px solid var(--buz); outline-offset: 3px; }
+.kap { max-width: var(--en); margin: 0 auto; padding-inline: var(--kenar); }
+
+/* Liquid glass (hafif sürüm): buzlu zemin, sol üstte ışık yansıması, içte ince halka */
+.cam, .notlar .not { position: relative; isolation: isolate;
+	background: linear-gradient(135deg, rgb(255 255 255 / 0.2), rgb(255 255 255 / 0.05) 38%, rgb(255 255 255 / 0.02) 62%, rgb(255 255 255 / 0.09));
+	backdrop-filter: blur(22px) saturate(1.8) brightness(1.08); -webkit-backdrop-filter: blur(22px) saturate(1.8) brightness(1.08);
+	box-shadow: inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.55), inset -1px -1px 0 rgb(255 255 255 / 0.1), inset 0 0 0 1px rgb(220 232 255 / 0.14),
+		inset 0 -10px 22px -10px rgb(150 190 255 / 0.28), 0 14px 34px -14px rgb(0 0 0 / 0.85); }
+.cam::before, .notlar .not::before { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+	background: radial-gradient(90% 55% at 28% 0%, rgb(255 255 255 / 0.28), transparent 60%), radial-gradient(60% 40% at 80% 110%, rgb(160 200 255 / 0.16), transparent 70%); }
+.bas { transition: scale 0.3s var(--yay); }
+.bas:active { scale: 0.95; }
+
+/* Üst şerit */
+.ust { position: relative; z-index: 6; display: grid; grid-template-columns: minmax(92px, 1fr) auto minmax(92px, 1fr); align-items: center; gap: 8px; height: 64px; }
+.geri { grid-column: 1; grid-row: 1; justify-self: start; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; color: var(--buz); flex: none; }
+.marka { grid-column: 2; grid-row: 1; display: flex; align-items: center; justify-content: center; gap: 9px; min-width: 0; }
+.marka img { width: 30px; height: auto; flex: none; }
+.marka .ad { font: 400 19px/1.25 var(--baslik); letter-spacing: -0.005em; white-space: nowrap; color: var(--yazi); }
+.ust .sag { grid-column: 3; grid-row: 1; justify-self: end; display: flex; gap: 8px; }
+.ust .sag > * { position: relative; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; color: var(--buz); }
+
+/* Dev yazı: satır maskesinden yükselir, harf harf değişir; boyu kutuya sığacak kadar (JS) */
+.dev { margin: 0; font-family: var(--baslik); font-weight: 300; color: var(--buz); letter-spacing: -0.04em; line-height: 0.88; white-space: nowrap; width: max-content; max-width: none; }
+.dev .satir { display: block; overflow: hidden; padding: 0.04em 0.06em 0.24em; margin: -0.04em -0.06em -0.24em; }
+.dev .satir > span { display: block; }
+.harf { display: inline-block; white-space: pre; }
+
+/* ───────── Liste ───────── */
+.l-bas { padding-block: 2px 10px; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 24px; overflow: hidden; }
+.l-bas .dev { font-size: 52px; }
+.l-meta { margin: 0; color: var(--yazi-2); font-size: 13.5px; }
+.cubuk { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 8; padding-block: 8px; }
+.cubuk-ic { display: grid; grid-template-columns: minmax(0, 1fr) 52px; gap: 8px; height: 52px; }
+.sekme { border-radius: 999px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 4px; transition: opacity 0.3s var(--egri); }
+.sekme i.gosterge { position: absolute; z-index: -1; left: 4px; top: 4px; bottom: 4px; width: calc((100% - 8px) / 3); border-radius: 999px; background: rgb(198 216 240 / 0.2);
+	box-shadow: inset 1px 1px 0 rgb(255 255 255 / 0.5), inset 0 0 0 1px rgb(220 232 255 / 0.22); transition: transform 0.55s var(--yay); }
+.sekme button { border-radius: 999px; font-size: 14px; color: var(--yazi-2); display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 0; transition: color 0.3s; }
+.sekme button[aria-selected="true"] { color: var(--yazi); }
+.sekme button small { font-size: 11px; color: var(--yazi-3); font-variant-numeric: tabular-nums; }
+.ara-dugme { border-radius: 50%; display: grid; place-items: center; font-size: 20px; color: var(--buz); }
+.ara-kutu { position: absolute; inset: 0 var(--kenar); right: calc(var(--kenar) + 60px); border-radius: 999px; display: flex; align-items: center; gap: 10px; padding: 0 18px;
+	opacity: 0; pointer-events: none; scale: 0.96 1; transform-origin: right; transition: opacity 0.3s var(--egri), scale 0.45s var(--yay); }
+.ara-kutu input { flex: 1; min-width: 0; height: 100%; outline: 0; font-size: 16px; }
+.ara-kutu input::placeholder { color: var(--yazi-3); }
+.ara-acik .ara-kutu { opacity: 1; pointer-events: auto; scale: 1 1; }
+.ara-acik .sekme { opacity: 0; pointer-events: none; }
+.cubuk { position: sticky; }
+.cubuk .kap { position: relative; }
+
+.altlar { display: flex; gap: 8px; overflow-x: auto; padding-block: 6px 4px; margin-inline: calc(-1 * var(--kenar)); padding-inline: var(--kenar); }
+.altlar button { flex: none; height: 38px; padding: 0 16px; border-radius: 999px; font-size: 13.5px; color: var(--yazi-2); background: var(--yuzey); box-shadow: inset 0 0 0 1px var(--cizgi); transition: color 0.3s, background 0.3s, box-shadow 0.3s, scale 0.3s var(--yay); }
+.altlar button:active { scale: 0.95; }
+.altlar button[aria-pressed="true"] { color: var(--murekkep); background: var(--buz); box-shadow: none; }
+
+.izgara { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-block: 12px 56px; }
+.bos { grid-column: 1 / -1; padding: 48px 0; text-align: center; color: var(--yazi-2); }
+
+/* Raf kartı: bir söndürücü ailesi; tüp solda ayakta, boylar kartın içinde seçilir */
+.aile { grid-column: 1 / -1; position: relative; height: 196px; border-radius: 30px; overflow: hidden; display: grid; grid-template-columns: 34% minmax(0, 1fr);
+	background: linear-gradient(140deg, var(--yuzey-2), var(--yuzey) 55%); box-shadow: inset 1px 1px 0 rgb(255 255 255 / 0.16), inset 0 0 0 1px var(--cizgi); transition: scale 0.35s var(--yay); }
+.aile:active { scale: 0.985; }
+.aile .ana { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.aile .resim { position: relative; }
+.aile .resim::before { content: ""; position: absolute; left: 50%; bottom: 10px; width: 78%; height: 16px; translate: -50% 0; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.7), transparent); }
+.aile .resim img { position: absolute; left: 50%; bottom: 14px; height: calc(100% - 26px); max-width: none; translate: -50% 0; filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.5)); }
+.aile .govde { padding: 18px 16px 14px 4px; display: grid; grid-template-rows: auto auto 1fr auto; min-width: 0; }
+.aile h3 { margin: -4px 0 -5px; padding: 0 2px 0 0; font: 300 27px/1.35 var(--baslik); letter-spacing: -0.02em; color: var(--buz); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aile .siniflar { display: flex; gap: 5px; margin-top: 9px; }
+.aile .siniflar b { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 7px; display: grid; place-items: center; font: 500 11px/1 var(--govde); color: var(--murekkep); background: var(--buz); }
+.aile .siniflar span { height: 22px; display: grid; place-items: center; font-size: 12px; color: var(--yazi-3); margin-left: 3px; white-space: nowrap; overflow: hidden; }
+.aile p { margin: 9px 0 0; font-size: 13px; line-height: 1.35; color: var(--yazi-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; align-self: start; }
+.aile .alt { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+.aile .boy { position: relative; z-index: 2; display: flex; gap: 5px; overflow-x: auto; margin-left: -4px; padding-left: 4px;
+	-webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 18px), transparent); }
+.aile .boy a { flex: none; min-width: 36px; height: 36px; padding: 0 9px; border-radius: 999px; display: grid; place-items: center; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--yazi);
+	background: rgb(198 216 240 / 0.1); box-shadow: inset 0 0 0 1px rgb(220 232 255 / 0.18); transition: scale 0.3s var(--yay), background 0.3s; }
+.aile .boy a:active { scale: 0.9; background: rgb(198 216 240 / 0.26); }
+.aile .boy em { font-style: normal; font-size: 12px; color: var(--yazi-3); align-self: center; padding: 0 14px 0 2px; flex: none; }
+.aile .fiyat { font: 400 19px/1.2 var(--baslik); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.aile .fiyat small { display: block; font: 400 11px/1 var(--govde); color: var(--yazi-3); margin-bottom: 4px; }
+.aile .fiyat small.dolum { margin: 6px 0 0; color: var(--yazi-2); font-variant-numeric: tabular-nums; }
+
+/* Ürün kartı: sabit ölçü; ad en çok iki satır, künye tek satır */
+.kart { position: relative; border-radius: 26px; padding: 8px 8px 14px; display: grid; grid-template-rows: auto 38px 17px 26px; row-gap: 0; min-width: 0;
+	background: var(--yuzey); box-shadow: inset 0 0 0 1px var(--cizgi); transition: scale 0.35s var(--yay); }
+.kart:active { scale: 0.97; }
+.tabak { aspect-ratio: 1; border-radius: 18px; display: grid; place-items: center; overflow: hidden; margin-bottom: 12px; }
+.tabak.acik { background: radial-gradient(90% 90% at 50% 35%, #fff, var(--tabak) 55%, var(--tabak-2)); }
+.tabak.acik img { width: 78%; height: 78%; object-fit: contain; }
+.tabak.koyu { background: radial-gradient(80% 80% at 50% 40%, rgb(120 160 225 / 0.22), transparent 70%); }
+.tabak.koyu img { height: 92%; max-width: none; filter: drop-shadow(0 10px 12px rgb(0 0 0 / 0.5)); }
+.tabak.ikon { background: radial-gradient(80% 80% at 50% 40%, rgb(120 160 225 / 0.2), transparent 70%); font-size: 54px; color: var(--buz); }
+.tabak.ikon .ti svg { stroke-width: 1; }
+.kart h3 { margin: 0; padding: 0 6px; font: 400 14px/19px var(--govde); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; align-self: start; }
+.kart .kunye { padding: 0 6px; font-size: 12px; line-height: 17px; color: var(--yazi-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kart .fiyat { padding: 0 6px; font: 400 19px/1 var(--baslik); font-variant-numeric: tabular-nums; align-self: end; }
+
+.iletisim { border-top: 1px solid var(--cizgi); padding-block: 32px 48px; display: grid; gap: 28px; color: var(--yazi-2); font-size: 14px; }
+.iletisim .logo { grid-column: 1 / -1; display: grid; gap: 10px; justify-items: center; text-align: center; }
+.iletisim .logo img { width: 44px; height: auto; }
+.iletisim .logo p { margin: 0; font: 400 20px/1.25 var(--baslik); color: var(--yazi); }
+.iletisim b { display: block; font: 400 22px/1.1 var(--baslik); color: var(--buz); margin-bottom: 8px; }
+.iletisim span { display: block; user-select: all; }
+.iletisim .yasal { font-size: 12.5px; color: var(--yazi-3); margin: 0; max-width: 60ch; }
+
+/* ───────── Ürün sahnesi ───────── */
+.sahne { position: relative; height: clamp(620px, calc(100svh - 64px), 760px); overflow-x: clip; overflow-y: visible; margin-inline: calc(-1 * var(--kenar)); touch-action: pan-y; }
+.sahne .dev { position: absolute; pointer-events: none; }
+.sahne .dev .satir > span { transform: translateY(104%); transition: transform 1.2s var(--yay); }
+.hazir .dev .satir > span { transform: none; }
+.dev.sol { left: var(--kenar); top: 4px; font-size: 56px; }
+.dev.sol .satir { display: inline-block; vertical-align: top; } .dev.sol .satir + .satir { margin-left: 0.16em; }
+.dev.sol .satir:nth-child(1) > span { transition-delay: 0.25s; }
+.dev.sol .satir:nth-child(2) > span { transition-delay: 0.33s; }
+.dev.sag { left: 0; right: 0; margin-inline: auto; top: 200px; font-size: 130px; text-align: center; }
+.dev.sag .harf.bosluk { width: var(--bosluk, auto); }
+/* telefon/tablet: sayı tüpün arkasında kocaman, birim (kg) ayrı katmanda tüpün önünde ve küçük (Berkin 2026-10-06) */
+.dev.sag .harf.yok { display: none; }
+.dev.birim { display: none; z-index: 4; font-weight: 400; letter-spacing: -0.02em; line-height: 1; opacity: 0; transition: opacity 0.9s var(--egri) 0.6s; }
+.sahne.ayri-kilo .dev.birim { display: block; } .hazir .dev.birim { opacity: 1; }
+.dev.sag .satir > span { transition-delay: 0.45s; }
+
+.isik::after { content: ""; position: absolute; left: 50%; top: 100%; width: 520px; height: 420px; translate: -50% -30%; border-radius: 50%; background: radial-gradient(closest-side, rgb(120 160 225 / 0.1), transparent); }
+.isik { position: absolute; left: 50%; top: 56%; width: 300px; height: 380px; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+	background: radial-gradient(closest-side, rgb(120 160 225 / 0.2), transparent); filter: blur(20px); opacity: 0; transition: opacity 1.6s var(--egri) 0.2s; }
+.hazir .isik { opacity: 1; }
+.golge { position: absolute; left: 50%; bottom: 22.5%; width: 200px; height: 36px; translate: -50% 0; border-radius: 50%; background: radial-gradient(closest-side, rgb(0 0 0 / 0.85), transparent); }
+
+.urun { position: absolute; left: 50%; bottom: 24%; aspect-ratio: 2 / 3; translate: -50% 0; perspective: 1100px; transition: height 0.95s cubic-bezier(0.65, 0, 0.35, 1); }
+.urun.kare { aspect-ratio: 1; bottom: 27%; left: 50%; }
+.sahne:has(.urun.kare) .golge { display: none; }
+.dondur { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.7s var(--egri); }
+.acilis { position: absolute; inset: 0; transform: translateY(70%); opacity: 0; transition: transform 1.4s var(--yay) 0.1s, opacity 0.9s var(--egri) 0.1s; }
+.hazir .acilis { transform: none; opacity: 1; }
+.vt .acilis { transition: none; }
+.katman { position: absolute; inset: 0; will-change: transform, opacity; display: grid; place-items: center; }
+.katman img { width: 100%; height: 100%; object-fit: contain; display: block; filter: drop-shadow(0 34px 34px rgb(0 0 0 / 0.55)); }
+.katman.tabakli { border-radius: 50%; background: radial-gradient(90% 90% at 50% 32%, #fff, var(--tabak) 55%, var(--tabak-2)); box-shadow: 0 30px 60px -20px rgb(0 0 0 / 0.8), inset 0 -14px 30px -10px rgb(11 26 48 / 0.25); }
+.katman.tabakli img { width: 66%; height: 66%; filter: none; }
+.katman.ikonlu { border-radius: 50%; font-size: 42cqw; color: var(--buz); }
+.katman.ikonlu .ti { font-size: 110px; }
+.katman.ikonlu .ti svg { stroke-width: 0.8; }
+
+/* Tüpün üstündeki cam kapsüller: tüpün önünde durur ki 3B dönüşte tüp fareyi yutmasın */
+.nokta { position: absolute; z-index: 4; width: 0; height: 0; opacity: 0; transform: translateZ(60px); transition: opacity 0.6s var(--egri); }
+.goster .nokta { opacity: 1; }
+.nokta .dugum { position: absolute; left: -13px; top: -13px; width: 26px; height: 26px; border-radius: 50%; z-index: 2; display: grid; place-items: center; font-size: 13px; color: var(--murekkep);
+	background: radial-gradient(circle at 35% 30%, #fff, var(--buz) 70%); box-shadow: 0 0 0 4px rgb(198 216 240 / 0.16), 0 6px 16px rgb(0 0 0 / 0.4); transition: transform 0.4s var(--yay); }
+.nokta .kapsul { position: absolute; top: -40px; white-space: nowrap; padding: 9px 16px 9px 24px; border-radius: 999px; font-size: 13px; color: var(--buz); transition: color 0.3s, background 0.3s, box-shadow 0.3s; }
+.nokta.sag .kapsul { left: -4px; }
+.nokta.sol .kapsul { right: -4px; padding: 9px 24px 9px 16px; }
+.nokta.sol { display: none; }
+.nokta .kapsul { opacity: 0; } .nokta.acik .kapsul { opacity: 1; }
+.nokta.acik .kapsul, .nokta:focus-visible .kapsul { color: var(--yazi); background-color: rgb(198 216 240 / 0.16); box-shadow: inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.7), inset 0 0 0 1px rgb(220 232 255 / 0.4), 0 0 28px -4px rgb(150 190 255 / 0.45); }
+/* fare tepkileri yalnız faresi olan cihazda; telefonda dokunuş hover'ı tetikleyip takılı bırakmasın */
+@media (hover: hover) { .nokta:hover .kapsul { opacity: 1; } .nokta:hover .kapsul { color: var(--yazi); background-color: rgb(198 216 240 / 0.16); box-shadow: inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.7), inset 0 0 0 1px rgb(220 232 255 / 0.4), 0 0 28px -4px rgb(150 190 255 / 0.45); } .nokta:hover .dugum { transform: scale(1.15); } .kart:hover, .aile:hover { scale: 0.99; } .al:hover { scale: 0.97; } }
+
+.not-temsili { display: none; }
+/* telefon: açıklama başlığın altında, bilgi etiketleri tüpün altında cam hap olarak */
+.sag-yazi { position: absolute; left: var(--kenar); top: 68px; width: min(76%, 320px); margin: 0; font-size: 13.5px; line-height: 1.4; color: var(--yazi-2); }
+.notlar { position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(3.5% + 66px); display: flex; justify-content: center; gap: 8px; padding-inline: var(--kenar); opacity: 0; transition: opacity 0.9s var(--egri) 1.1s; }
+.hazir .notlar { opacity: 1; }
+.not { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px 0 12px; border-radius: 999px; font-size: 12.5px; white-space: nowrap; color: var(--yazi); min-width: 0; }
+.not .simge { display: grid; place-items: center; font-size: 17px; color: var(--buz); }
+.not p { margin: 0; }
+.not .uz { display: none; }
+@media (max-width: 1179.98px) { .notlar .not .simge.cam { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; } .notlar .not .simge.cam::before { display: none; } }
+.al { position: absolute; z-index: 3; right: var(--kenar); bottom: 24%; width: 108px; height: 108px; border-radius: 50%; display: grid; place-items: center; align-content: center; gap: 4px;
+	opacity: 0; scale: 0.8; transition: opacity 0.8s var(--egri) 1.1s, scale 1s var(--yay) 1.1s; }
+.hazir .al { opacity: 1; scale: 1; }
+.hazir .al:active { scale: 0.93; transition-delay: 0s; transition-duration: 0.3s; }
+.al .ti { font-size: 18px; color: var(--buz); }
+.al small { font-size: 11px; line-height: 1; color: var(--yazi-2); }
+.al b { font: 400 20px/1 var(--baslik); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.puskurt { position: absolute; z-index: 3; right: var(--kenar); bottom: calc(24% + 122px); height: 44px; padding: 0 16px 0 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px;
+	font: 400 14px/1 var(--baslik); color: var(--yazi); opacity: 0; transition: opacity 0.8s var(--egri) 1.2s, scale 0.3s var(--yay); }
+.hazir .puskurt { opacity: 1; }
+.puskurt:active { scale: 0.94; }
+.puskurt .ti { font-size: 18px; color: var(--buz); }
+.duman { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+.perde { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 50; }
+
+.boylar { position: absolute; z-index: 3; left: 0; right: 0; bottom: 3.5%; margin-inline: auto; width: max-content; display: flex; align-items: center; gap: 10px;
+	opacity: 0; translate: 0 12px; transition: opacity 0.8s var(--egri) 1.3s, translate 0.8s var(--yay) 1.3s; }
+.hazir .boylar { opacity: 1; translate: 0 0; }
+.boylar .ok { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; color: var(--buz); transition: scale 0.3s var(--yay), opacity 0.3s; }
+.boylar .ok:active { scale: 0.9; }
+.boylar .ok:disabled { opacity: 0.35; cursor: default; }
+.boylar .sayfa { height: 50px; padding: 0 16px; border-radius: 999px; display: flex; align-items: center; }
+.boylar .sayfa button { width: 22px; height: 50px; display: grid; place-items: center; transition: width 0.5s var(--yay); }
+.boylar .sayfa button::before { content: ""; width: 9px; height: 9px; border-radius: 999px; background: rgb(222 231 244 / 0.34); transition: width 0.5s var(--yay), background 0.3s; }
+.boylar .sayfa button[aria-pressed="true"] { width: 42px; }
+.boylar .sayfa button[aria-pressed="true"]::before { width: 30px; background: var(--buz); }
+
+/* Bilgi bölümleri */
+.bilgi { padding-block: 28px 120px; display: grid; gap: 64px; }
+.giris { margin: 0; font: 300 23px/1.25 var(--baslik); letter-spacing: -0.01em; color: var(--yazi); text-wrap: balance; }
+.giris span { color: var(--yazi-2); }
+.olculer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+.olcu { position: relative; padding: 18px 0; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.olcu b { padding: 0 2px 0.14em 0; font: 300 40px/1.1 var(--baslik); color: var(--buz); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.olcu span { color: var(--yazi-2); font-size: 13.5px; }
+.bolum { display: grid; gap: 24px; }
+.bolum h2 { margin: 0; font: 300 46px/0.95 var(--baslik); letter-spacing: -0.035em; color: var(--buz); }
+.adimlar { display: grid; gap: 0; }
+.adim { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px 0; padding: 18px 0; }
+.olcu::before, .adim::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--cizgi); transform-origin: left; transition: transform 1.2s var(--yay); transition-delay: var(--g, 0ms); }
+.adim i { grid-row: span 2; font: 400 14px/1.6 var(--baslik); font-style: normal; color: var(--buz-koyu); letter-spacing: 0.08em; }
+.adim b { font: 400 21px/1.2 var(--baslik); }
+.adim span { color: var(--yazi-2); font-size: 14.5px; }
+.alanlar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; }
+.alanlar div { display: flex; align-items: center; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--cizgi); font: 400 17px/1.2 var(--baslik); min-width: 0; }
+.alanlar .ti { font-size: 21px; color: var(--buz-koyu); flex: none; }
+.uyari { margin: 24px 0 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; color: var(--yazi-2); font-size: 14.5px; }
+.uyari .ti { font-size: 20px; color: var(--kirmizi); margin-top: 1px; }
+.uyari b { color: var(--yazi); font-weight: 500; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+td { padding: 15px 0; border-top: 1px solid var(--cizgi); vertical-align: top; }
+td:first-child { color: var(--yazi-3); width: 42%; padding-right: 12px; }
+td.bos { color: var(--yazi-3); font-style: italic; }
+.serit { display: grid; grid-auto-flow: column; grid-auto-columns: 156px; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity; margin-inline: calc(-1 * var(--kenar)); padding-inline: var(--kenar); scroll-padding-inline: var(--kenar); }
+.serit .kart { scroll-snap-align: start; }
+
+/* Tüp gövde etiketi (Berkin 2026-10-06): görseller etiketsiz, temiz gazlı ile KKT aynı görünüyordu. Her türün kendi renk bandı + büyük madde kodu.
+   Konum uygulamadaki tüp kartıyla aynı gövde ölçüsünden (TupSahnesi GOVDE); yazılar etiketin genişliğine oranlı (cqw). */
+.tupcuk { position: relative; display: block; aspect-ratio: 2 / 3; }
+.tupcuk img { display: block; width: 100%; height: 100%; }
+.aile .resim .tupcuk { position: absolute; left: 50%; bottom: 14px; height: calc(100% - 26px); translate: -50% 0; }
+.aile .resim .tupcuk img { position: static; translate: none; height: 100%; }
+.tabak.koyu .tupcuk { height: 92%; } .tabak.koyu .tupcuk img { height: 100%; width: 100%; }
+.satir-s .tabak.koyu .tupcuk { height: 50px; } .satir-s .tabak.koyu .tupcuk img { height: 100%; width: 100%; }
+.etiket { position: absolute; left: var(--x); top: var(--t); width: var(--w); translate: -50% 0; rotate: var(--a); container-type: inline-size; overflow: hidden;
+	display: grid; justify-items: center; border-radius: 5% / 4%; background: #f3efe6; color: #1a1d24; pointer-events: none; user-select: none; }
+.etiket::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+	background: linear-gradient(90deg, rgb(40 8 8 / 0.42), transparent 22%, rgb(255 255 255 / 0.14) 44%, transparent 64%, rgb(40 8 8 / 0.48)); }
+.etiket i { justify-self: stretch; padding: 3.4cqw 0 3cqw; background: var(--renk); color: var(--bant-yazi, #fff); text-align: center; font: 600 6.4cqw/1 var(--govde); font-style: normal; letter-spacing: 0.12em; text-transform: uppercase; }
+.etiket b { margin-top: 6cqw; font: 700 var(--kf)/0.95 var(--baslik); letter-spacing: -0.02em; white-space: nowrap; }
+.etiket > span { margin-top: 2.4cqw; font: 500 8.4cqw/1.1 var(--govde); color: #4b515d; white-space: nowrap; }
+/* cqw yalnız iç elemanlarda: etiketin kendi kutusunda cqw sayfaya göre çözülür */
+.etiket em { display: flex; align-items: center; gap: 2.2cqw; margin: 5.5cqw 0 6cqw; font-style: normal; }
+.etiket u { display: grid; place-items: center; width: 11cqw; height: 11cqw; border: 0.7cqw solid currentColor; border-radius: 2cqw; text-decoration: none; font: 700 7.4cqw/1 var(--govde); }
+.etiket s { margin-left: 2cqw; text-decoration: none; font: 700 10cqw/1 var(--baslik); white-space: nowrap; }
+/* Alt çubuk: fiyat dairesi ekrandan çıkınca gelir */
+.alt-cubuk { position: fixed; z-index: 20; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); max-width: 520px; margin-inline: auto; height: 64px; border-radius: 999px; padding: 0 8px 0 22px;
+	display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; translate: 0 140%; transition: translate 0.6s var(--yay); background-color: rgb(8 20 42 / 0.72); }
+.alt-cubuk.acik { translate: 0 0; }
+.alt-cubuk div { min-width: 0; }
+.alt-cubuk small { display: block; font-size: 12px; color: var(--yazi-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.alt-cubuk b { display: block; font: 400 21px/1.25 var(--baslik); font-variant-numeric: tabular-nums; }
+.alt-cubuk button { height: 48px; padding: 0 20px 0 16px; border-radius: 999px; display: flex; align-items: center; gap: 8px; font-size: 14.5px; color: var(--murekkep); background: var(--buz); }
+.alt-cubuk button .ti { font-size: 20px; }
+.alt-cubuk button:active { scale: 0.95; }
+
+/* Kaydırdıkça açılma: zamanla oynar (kaydırmaya bağlı değil). Gizli hâli yalnız JS kurar; bitince sınıflar kalkar.
+   Varsayılan: aşağıdan, bulanıktan netliğe. sol: soldan. pop: küçükten büyüyerek. kart: sağdan dönerek. cizgi: önce çizgi çizilir, sonra içerik gelir. baslik: harf harf maskeden. */
+.bk { opacity: 0; translate: 0 70px; scale: 0.93; filter: blur(8px); transition: opacity 0.7s ease-out, translate 1.15s var(--yay), scale 1.15s var(--yay), rotate 1.15s var(--yay), filter 0.8s ease-out; }
+.bk[data-v="sol"] { translate: -64px 0; scale: 1; }
+.bk[data-v="pop"] { translate: 0 30px; scale: 0.55; }
+.bk[data-v="kart"] { translate: 90px 0; scale: 0.85; rotate: 5deg; }
+.bk[data-v="cizgi"] { opacity: 1; translate: none; scale: 1; filter: none; }
+.bk[data-v="cizgi"]::before { transform: scaleX(0); }
+.bk[data-v="cizgi"] > * { opacity: 0; translate: 0 44px; filter: blur(7px); transition: opacity 0.7s ease-out, translate 1.1s var(--yay), filter 0.8s ease-out; transition-delay: calc(var(--g, 0ms) + 260ms); }
+.bk[data-v="cizgi"] > :nth-child(2) { transition-delay: calc(var(--g, 0ms) + 360ms); }
+.bk[data-v="cizgi"] > :nth-child(3) { transition-delay: calc(var(--g, 0ms) + 460ms); }
+.bk.gor, .bk[data-v].gor { opacity: 1; translate: 0 0; scale: 1; rotate: 0deg; filter: blur(0); }
+.bk.gor[data-v="cizgi"]::before { transform: none; }
+.bk.gor[data-v="cizgi"] > * { opacity: 1; translate: 0 0; filter: blur(0); }
+.hs { display: block; overflow: hidden; padding: 0.08em 0 0.3em; margin: -0.08em 0 -0.3em; }
+.hc { display: inline-block; white-space: pre; }
+.hbk .hc { transform: translateY(120%) rotate(9deg); transform-origin: left bottom; transition: transform 1.15s var(--yay); transition-delay: calc(var(--g, 0ms) + var(--s, 0) * 150ms + var(--c, 0) * 32ms); }
+.hbk.gor .hc { transform: none; }
+
+/* Sepet: telefonda alttan açılan sayfa, geniş ekranda sağdan gelen panel. Ödeme yok; liste WhatsApp mesajı olarak gider. */
+.sepet-sayi { position: absolute; right: -3px; top: -3px; min-width: 19px; height: 19px; padding: 0 5px; border-radius: 999px; display: grid; place-items: center; font: 500 11px/1 var(--govde); font-variant-numeric: tabular-nums; color: #fff; background: var(--kirmizi); }
+.sepet-perde { position: fixed; inset: 0; z-index: 39; background: rgb(2 6 14 / 0.6); opacity: 0; pointer-events: none; transition: opacity 0.4s var(--egri); }
+.sepet-perde.acik { opacity: 1; pointer-events: auto; }
+.sepet { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; max-height: 86%; border-radius: 30px 30px 0 0; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; visibility: hidden;
+	padding-bottom: env(safe-area-inset-bottom, 0px); background: rgb(9 21 43 / 0.88); backdrop-filter: blur(28px) saturate(1.6); -webkit-backdrop-filter: blur(28px) saturate(1.6);
+	box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.22), inset 0 0 0 1px var(--cizgi), 0 -20px 60px -20px rgb(0 0 0 / 0.9); translate: 0 104%; transition: translate 0.6s var(--yay), visibility 0s 0.6s; }
+.sepet.acik { translate: 0 0; visibility: visible; transition: translate 0.6s var(--yay); }
+.sepet > header { display: flex; align-items: center; justify-content: space-between; padding: 18px 16px 10px 22px; }
+.sepet h2 { margin: 0; font: 300 34px/1.2 var(--baslik); letter-spacing: -0.03em; color: var(--buz); }
+.sepet h2 small { font: 400 13px/1 var(--govde); letter-spacing: 0; color: var(--yazi-3); margin-left: 8px; }
+.sepet-kapat { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; color: var(--buz); }
+.sepet-liste { overflow-y: auto; padding: 0 22px; overscroll-behavior: contain; }
+.sepet-bos { margin: 0; padding: 28px 0 40px; color: var(--yazi-2); font-size: 14.5px; max-width: 34ch; }
+.sepet-firma { margin: 14px 0 0; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--yazi-3); }
+.satir-s { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--cizgi); }
+.satir-s .tabak { margin: 0; border-radius: 14px; width: 56px; height: 56px; } .satir-s .tabak.koyu img { height: 50px; width: auto; } .satir-s .tabak.acik img { width: 44px; height: 44px; } .satir-s .tabak.ikon { font-size: 26px; }
+.satir-s h3 { margin: 0; font: 400 14px/1.3 var(--govde); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.satir-s span { font: 400 16px/1.4 var(--baslik); font-variant-numeric: tabular-nums; color: var(--yazi-2); }
+.adet { display: grid; grid-template-columns: 34px 26px 34px; align-items: center; height: 38px; border-radius: 999px; background: var(--yuzey); box-shadow: inset 0 0 0 1px var(--cizgi); }
+.adet button { height: 38px; display: grid; place-items: center; font-size: 15px; color: var(--buz); transition: scale 0.3s var(--yay); }
+.adet button:active { scale: 0.8; }
+.adet b { text-align: center; font: 400 15px/1 var(--govde); font-variant-numeric: tabular-nums; }
+.sepet > footer { padding: 14px 22px 18px; display: grid; gap: 12px; }
+.sepet-toplam { display: flex; align-items: baseline; justify-content: space-between; color: var(--yazi-2); font-size: 13.5px; }
+.sepet-toplam b { font: 400 28px/1.2 var(--baslik); color: var(--yazi); font-variant-numeric: tabular-nums; }
+.sepet-gonder { height: 54px; border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15.5px; color: var(--murekkep); background: var(--buz); transition: scale 0.3s var(--yay); }
+.sepet-gonder:active { scale: 0.97; }
+.sepet-gonder .ti { font-size: 21px; }
+.sepet-not { margin: 0; font-size: 12px; color: var(--yazi-3); }
+
+/* Sayfa geçişi: karttaki görsel sahnedeki yerine uçar */
+::view-transition-group(urun-gorsel) { animation-duration: 0.75s; animation-timing-function: cubic-bezier(0.65, 0, 0.2, 1); }
+::view-transition-old(urun-gorsel), ::view-transition-new(urun-gorsel) { height: 100%; width: 100%; object-fit: contain; }
+::view-transition-old(root) { animation: 0.3s var(--egri) both vt-cik; }
+::view-transition-new(root) { animation: 0.5s var(--egri) 0.12s both vt-gir; }
+@keyframes vt-cik { to { opacity: 0; } }
+@keyframes vt-gir { from { opacity: 0; } }
+
+/* ───────── Geniş ekran ───────── */
+@media (min-width: 760px) {
+	:root { --kenar: 40px; }
+	.ust { height: 88px; }
+	.l-bas { padding-block: 0 14px; }
+	.cubuk-ic { grid-template-columns: minmax(0, 460px) 52px; }
+	.ara-kutu { right: auto; width: 460px; }
+	.izgara { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+	.aile { grid-column: span 2; height: 232px; }
+	.aile h3 { font-size: 32px; }
+	.iletisim { grid-template-columns: repeat(2, minmax(0, 1fr)); } .iletisim .yasal { grid-column: 1 / -1; }
+
+	.sahne { height: clamp(640px, calc(100vh - 92px), 760px); }
+	.al { width: 132px; height: 132px; } .al b { font-size: 24px; } .puskurt { bottom: calc(24% + 148px); height: 50px; font-size: 15.5px; }
+	.sepet { left: auto; top: 12px; right: 12px; bottom: 12px; width: 420px; max-height: none; border-radius: 30px; padding-bottom: 0; translate: 108% 0; }
+	.bilgi { padding-block: 56px 140px; gap: 96px; }
+	.olculer { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 24px; }
+	.olcu { padding-top: 26px; } .olcu b { font-size: 56px; }
+	.bolum { grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 56px; align-items: start; }
+	.bolum.tam { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+	.bolum h2 { font-size: 64px; }
+	.adimlar { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; }
+	.alanlar { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; } .alanlar div { font-size: 19px; }
+	.serit { grid-auto-columns: 200px; gap: 16px; }
+}
+@media (min-width: 1180px) {
+	.sahne { height: clamp(660px, calc(100vh - 92px), 820px); }
+	.dev.sol { left: 9%; top: 5%; text-align: center; }
+	.dev.sol .satir { display: block; } .dev.sol .satir + .satir { margin-left: 0; }
+	.dev.sag { right: auto; left: 56%; margin-inline: 0; top: 38%; text-align: left; }
+	.dev.sag .harf.bosluk { width: auto; }
+	.urun, .isik, .golge { left: 47%; }
+	.urun { bottom: 6%; } .urun.kare { bottom: 14%; left: 47%; }
+	.isik { width: 460px; height: 560px; top: 56%; }
+	.golge { bottom: 5%; width: 280px; }
+	.nokta .kapsul { opacity: 1; }
+	.nokta .kapsul { top: -46px; padding: 11px 22px 11px 26px; font-size: 15px; }
+	.nokta.sol .kapsul { padding: 11px 26px 11px 22px; }
+	.notlar { position: absolute; left: 9%; right: auto; bottom: auto; top: 54%; width: min(300px, 22vw); display: grid; justify-content: normal; padding-inline: 0; gap: 26px; opacity: 0; transition: opacity 0.9s var(--egri) 1.1s; }
+	.notlar .not { background: none; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; } .notlar .not::before { display: none; }
+	.not .uz { display: inline; } .not .kisa { display: none; }
+	.hazir .notlar { opacity: 1; }
+	.not { display: grid; grid-template-columns: 52px 1fr; gap: 20px; align-items: center; height: auto; padding: 0; border-radius: 0; font-size: inherit; white-space: normal; }
+	.not .simge { width: 52px; height: 52px; border-radius: 17px; display: grid; place-items: center; font-size: 23px; color: var(--buz); }
+	.not p { margin: 0; text-align: right; color: var(--yazi-2); font-size: 15.5px; line-height: 1.4; }
+	.sag-yazi { display: block; position: absolute; left: calc(47% + 310px); top: 68%; width: 220px; font-size: 15.5px; margin: 0; color: var(--yazi-2); font-size: 15.5px; line-height: 1.4; opacity: 0; transition: opacity 0.9s var(--egri) 1.3s; }
+	.hazir .sag-yazi { opacity: 1; }
+	.not-temsili { display: block; position: absolute; left: 9%; bottom: 7%; font-size: 12px; color: var(--yazi-3); }
+	.al { right: auto; left: calc(47% + 150px); bottom: auto; top: 65%; width: 132px; height: 132px; gap: 6px; }
+	.sahne:has(.urun.kare) .al { left: calc(47% + 220px); }
+	.al .ti { font-size: 22px; } .al b { font-size: 26px; }
+	.puskurt { right: auto; left: 9%; bottom: auto; top: 79%; height: 52px; font-size: 16px; padding: 0 22px 0 18px; }
+	.duman { -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+	.boylar { left: auto; right: 4%; bottom: 7%; margin: 0; }
+	.giris { display: none; }
+}
+@media (max-width: 359.98px) { .ust { grid-template-columns: minmax(50px, 1fr) auto minmax(50px, 1fr); } .ust .sag a { display: none; } .marka .ad { font-size: 16px; } .marka img { width: 24px; } }
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after { transition-duration: 0.01s !important; transition-delay: 0s !important; animation-duration: 0.01s !important; }
+	::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
+
+/* ───────── Kaptan sitesi (2026-10-11): cam daha hafif; kartlar sekme çubuğuyla aynı cam dilinde; derinlikli kartlar ─────────
+   Kabarza "depth map" örneği: arka plan ve büyük yazı pencereye kırpılır, ürün kırpılmaz. İmleçle kart eğilir, katmanlar
+   derinliklerine göre kayar; üstüne gelince ürün öne çıkıp pencerenin dışına taşar. */
+.cam, .notlar .not { box-shadow: inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.4), inset -1px -1px 0 rgb(255 255 255 / 0.06), inset 0 0 0 1px rgb(220 232 255 / 0.12),
+	inset 0 -8px 18px -12px rgb(150 190 255 / 0.18), 0 8px 20px -16px rgb(0 0 0 / 0.5); }
+.aile, .kart { --px: 0; --py: 0; background: linear-gradient(135deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03) 40%, rgb(255 255 255 / 0.015) 64%, rgb(255 255 255 / 0.05));
+	box-shadow: inset 1.5px 1.5px 0 -0.5px rgb(255 255 255 / 0.3), inset 0 0 0 1px rgb(220 232 255 / 0.11), 0 8px 20px -16px rgb(0 0 0 / 0.5);
+	transform: perspective(1100px) rotateX(calc(var(--py) * -3deg)) rotateY(calc(var(--px) * 3.5deg)); transition: transform 0.7s var(--yay), scale 0.35s var(--yay); }
+.kart { transform: perspective(900px) rotateX(calc(var(--py) * -6deg)) rotateY(calc(var(--px) * 6deg)); }
+.aile.ic, .kart.ic { transition-duration: 0.18s, 0.35s; transition-timing-function: ease-out, var(--yay); }
+.aile { overflow: visible; }
+.aile .resim { pointer-events: none; }
+.pencere { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; isolation: isolate; background: var(--zemin); box-shadow: inset 0 0 0 1px var(--cizgi); }
+.aile .pencere { inset: 10px 0 10px 10px; border-radius: 22px; }
+.pencere .zemin, .aile .resim .pencere .zemin, .tabak .pencere .zemin { position: absolute; left: -8%; top: -8%; bottom: auto; width: 116%; height: 116%; max-width: none; translate: none; object-fit: cover;
+	filter: brightness(0.62) saturate(0.85) blur(1px); transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -8px), 0); transition: transform 0.7s var(--yay), filter 0.6s; }
+.pencere::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(4 9 19 / 0.3) 0%, rgb(4 9 19 / 0) 38%, rgb(4 9 19 / 0.5) 100%); }
+.pencere .yazi { position: absolute; left: 0; right: 0; top: 8%; z-index: 1; text-align: center; white-space: nowrap; font: 400 clamp(28px, 2.8vw, 44px)/1 var(--baslik); letter-spacing: -0.04em; color: rgb(255 255 255 / 0.92);
+	transform: translate3d(calc(var(--px) * -16px), calc(var(--py) * -10px), 0); transition: transform 0.7s var(--yay); }
+.aile .resim::before { z-index: 1; transition: opacity 0.6s, scale 0.8s var(--yay); }
+.aile .resim .tupcuk { z-index: 2; transform-origin: 50% 100%; transform: translate3d(calc(var(--px) * 12px), calc(var(--py) * 6px), 0); transition: transform 0.8s var(--yay); }
+.tabak.derin { position: relative; overflow: visible; background: none; min-height: 0; grid-template: minmax(0, 1fr) / minmax(0, 1fr); } /* kırpma yok ama kare kalır; görsel yüzdesi kareye göre */
+.tabak.derin > img, .tabak.derin > .tupcuk { position: relative; z-index: 2; align-self: end; margin-bottom: 7%; transform-origin: 50% 100%; filter: drop-shadow(0 14px 14px rgb(0 0 0 / 0.45));
+	transform: translate3d(calc(var(--px) * 10px), calc(var(--py) * 6px), 0); transition: transform 0.8s var(--yay), filter 0.6s; }
+.tabak.derin.acik > img { width: 70%; height: 66%; object-fit: contain; }
+.tabak.derin.koyu > .tupcuk { height: 80%; }
+.tabak.derin .pencere .yazi { top: 9%; font-size: clamp(22px, 2vw, 32px); }
+.aile.ic .pencere .zemin, .aile.ic .pencere .yazi, .aile.ic .resim .tupcuk, .kart.ic .pencere .zemin, .kart.ic .pencere .yazi, .kart.ic .tabak.derin > * { transition-duration: 0.18s; transition-timing-function: ease-out; }
+@media (hover: hover) {
+	.aile:hover .resim .tupcuk { transform: translate3d(calc(var(--px) * 22px), calc(-15% + var(--py) * 10px), 0) scale(1.2); transition-duration: 0.8s; transition-timing-function: var(--yay); }
+	.aile:hover .resim::before { opacity: 0.45; scale: 1.25 1; }
+	.kart:hover .tabak.derin > img, .kart:hover .tabak.derin > .tupcuk { transform: translate3d(calc(var(--px) * 18px), calc(-16% + var(--py) * 8px), 0) scale(1.22); filter: drop-shadow(0 30px 26px rgb(0 0 0 / 0.5)); transition-duration: 0.8s; transition-timing-function: var(--yay); }
+	.aile:hover .pencere .zemin, .kart:hover .pencere .zemin { filter: brightness(0.42) saturate(0.7) blur(3px); }
+	.kart:hover, .aile:hover { scale: 1; }
+}
+#sepetDugme, #sepet, #sepetPerde { display: none !important; }
+a.al { text-decoration: none; color: inherit; }
+</style>
+
+<div class="kap">
+	<a href="../index.html#urunler" style="position:fixed;z-index:9999;left:16px;top:16px;display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:12px;background:rgba(16,34,62,.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);color:#eef2f8;font:500 13px/1 system-ui,sans-serif;text-decoration:none;border:1px solid rgba(198,216,240,.18)">← Kaptan</a>
+<header class="ust">
+		<button type="button" class="geri cam bas" id="geri" aria-label="Kataloğa dön" hidden><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg></i></button>
+		<a class="marka" href="#ysc" data-git="ysc" aria-label="Kaptan, ürün kataloğu"><img src="kaptan-logo.png" alt=""><span class="ad" id="markaAlt">Kaptan Yangın</span></a>
+		<div class="sag"><button type="button" class="cam bas" id="sepetDugme" aria-label="Sepet" aria-haspopup="dialog"><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304z" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg></i><b class="sepet-sayi" id="sepetSayi" hidden></b></button></div>
+	</header>
+</div>
+
+<main id="liste">
+	<div class="kap l-bas">
+		<h1 class="dev" id="lBaslik" aria-live="polite"><span class="satir"><span data-harf>Yangın tüpleri</span></span></h1>
+		<p class="l-meta" id="lMeta"></p>
+	</div>
+	<div class="cubuk" id="cubuk">
+		<div class="kap">
+			<div class="cubuk-ic">
+				<div class="sekme cam" id="sekme" role="tablist" aria-label="Bölümler"><i class="gosterge" aria-hidden="true"></i></div>
+				<button type="button" class="ara-dugme cam bas" id="araDugme" aria-label="Ürün ara" aria-expanded="false"><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg></i></button>
+			</div>
+			<label class="ara-kutu cam"><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg></i><input id="ara" type="search" placeholder="Ürün, marka ya da model ara" autocomplete="off" enterkeyhint="search" aria-label="Ürün ara"></label>
+		</div>
+	</div>
+	<div class="kap">
+		<div class="altlar" id="altlar" hidden></div>
+		<div class="izgara" id="izgara"></div>
+		<footer class="iletisim" id="iletisim"></footer>
+	</div>
+</main>
+
+<main id="urunSayfa" hidden></main>
+
+<div class="alt-cubuk cam" id="altCubuk" aria-hidden="true">
+	<div><small id="acAd"></small><b id="acFiyat"></b></div>
+	<button type="button" id="acEkle"><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-3.926a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304h11.339a2 2 0 0 1 1.977 2.304l-.263 1.708" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg></i>Fiyat al</button>
+</div>
+
+<div class="sepet-perde" id="sepetPerde"></div>
+<aside class="sepet" id="sepet" role="dialog" aria-label="Sepet" aria-hidden="true">
+	<header><h2>Sepet<small id="sepetOzet"></small></h2><button type="button" class="sepet-kapat cam bas" id="sepetKapat" aria-label="Sepeti kapat"><i class="ti" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg></i></button></header>
+	<div class="sepet-liste" id="sepetListe"></div>
+	<footer id="sepetAlt"></footer>
+</aside>
+
+<script>
+const VERI = {"tarih":"2026-10-06T15:11:02.768Z","kurumlar":[{"kisa_ad":"KY","ad":"Kaptan Yangın","telefon":"0533 407 75 57","eposta":"info@kaptanyangin.com","web":"kaptanyangin.com","adres":"Samatya, Fatih / İstanbul"}],"bolumler":[{"kategori":"ysc","ad":"Yangın söndürücüler","kurum":"KY","urunler":[{"id":26,"ad":"1 kg FM-200 pano tipi söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"1.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/pano-2kg.webp"},{"id":25,"ad":"1 kg KKT araç tipi yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"1.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-1kg.webp"},{"id":24,"ad":"2 kg FM-200 pano tipi söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"2.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/pano-2kg.webp"},{"id":8,"ad":"2 kg KKT araç tipi yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"2.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-2kg.webp"},{"id":3,"ad":"5 kg CO₂ yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"5.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/co2-5kg.webp"},{"id":17,"ad":"6 kg FK-5-1-12 temiz gazlı söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-6kg.webp"},{"id":10,"ad":"6 kg FM-200 pano tipi söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/pano-6kg.webp"},{"id":16,"ad":"6 kg ıslak kimyasal davlumbaz söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/davlumbaz.webp"},{"id":23,"ad":"6 kg KKT sprinkli söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/sprinkli-6kg.webp"},{"id":1,"ad":"6 kg KKT yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-6kg.webp"},{"id":4,"ad":"6 kg köpüklü yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-6kg.webp"},{"id":18,"ad":"9 kg köpüklü yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"9.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-9kg.webp"},{"id":15,"ad":"10 kg CO₂ yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"10.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/co2-10kg.webp"},{"id":21,"ad":"12 kg KKT sprinkli söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"12.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/sprinkli-12kg.webp"},{"id":2,"ad":"12 kg KKT yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"12.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-12kg.webp"},{"id":108,"ad":"12 kg köpüklü yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"12.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-12kg.webp"},{"id":19,"ad":"25 kg KKT tekerlekli yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"25.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-25kg.webp"},{"id":247,"ad":"25 kg köpüklü tekerlekli yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"25.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-25kg.webp"},{"id":9,"ad":"50 kg KKT tekerlekli yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"50.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-50kg.webp"},{"id":109,"ad":"50 kg köpüklü tekerlekli yangın söndürücü","kategori":"ysc","alt_tur":null,"marka":null,"model":null,"kapasite":"50.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/tupler/kkt-50kg.webp"}]},{"kategori":"yangin","ad":"Yangın güvenliği","kurum":"KY","urunler":[{"id":60,"ad":"Acil aydınlatma armatürü","kategori":"yangin","alt_tur":"Acil aydınlatma","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":68,"ad":"Duman dedektörü","kategori":"yangin","alt_tur":"Algılama","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":67,"ad":"Yangın ihbar butonu","kategori":"yangin","alt_tur":"Algılama","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":58,"ad":"Yangın battaniyesi","kategori":"yangin","alt_tur":"Yangın battaniyesi","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":29,"ad":"Yangın dolabı","kategori":"yangin","alt_tur":"Yangın dolabı","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":28,"ad":"Yangın kapısı (çift kanat, 60 dk)","kategori":"yangin","alt_tur":"Yangın kapısı","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null},{"id":27,"ad":"Yangın kapısı (tek kanat, 60 dk)","kategori":"yangin","alt_tur":"Yangın kapısı","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":null}]},{"kategori":"kantar","ad":"Tartı sistemleri","kurum":"KY","urunler":[{"id":85,"ad":"CAS IE-1700 çengel baskül 500/1000 kg","kategori":"kantar","alt_tur":"Asma kantar","marka":"CAS","model":"IE-1700","kapasite":"1000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ie-1700.webp"},{"id":66,"ad":"Asma kantar (vinç kantarı) 3 t","kategori":"kantar","alt_tur":"Asma kantar","marka":null,"model":null,"kapasite":"3000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/asma-kantar.svg"},{"id":90,"ad":"CAS Caston-II Plus vinç baskülü 1/3/5/10 t","kategori":"kantar","alt_tur":"Asma kantar","marka":"CAS","model":"Caston-II Plus","kapasite":"10000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/caston-ii-plus.webp"},{"id":97,"ad":"CAS CL3000 barkodlu terazi 15/30 kg","kategori":"kantar","alt_tur":"Barkodlu terazi","marka":"CAS","model":"CL3000","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/cl3000.webp"},{"id":102,"ad":"CAS CL5200 N barkodlu terazi 15/30 kg","kategori":"kantar","alt_tur":"Barkodlu terazi","marka":"CAS","model":"CL5200 N","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/cl5200.webp"},{"id":83,"ad":"CAS CL5500D barkodlu terazi 15/30 kg","kategori":"kantar","alt_tur":"Barkodlu terazi","marka":"CAS","model":"CL5500D","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/cl5500d.webp"},{"id":91,"ad":"CAS CL7200D dokunmatik barkodlu terazi 15/30 kg","kategori":"kantar","alt_tur":"Barkodlu terazi","marka":"CAS","model":"CL7200D","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/cl7200d.webp"},{"id":105,"ad":"CAS CT100 fişli terazi","kategori":"kantar","alt_tur":"Barkodlu terazi","marka":"CAS","model":"CT100","kapasite":null,"birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ct100-p.webp"},{"id":75,"ad":"Baskül 60 kg","kategori":"kantar","alt_tur":"Baskül","marka":null,"model":null,"kapasite":"60.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/baskul.svg"},{"id":65,"ad":"Baskül 150 kg","kategori":"kantar","alt_tur":"Baskül","marka":null,"model":null,"kapasite":"150.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/baskul.svg"},{"id":87,"ad":"CAS DB-I tartım baskülü 30–600 kg","kategori":"kantar","alt_tur":"Baskül","marka":"CAS","model":"DB-I","kapasite":"600.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/db-i-baskul.webp"},{"id":92,"ad":"CAS DH kontrol baskülü 30–600 kg (onaysız)","kategori":"kantar","alt_tur":"Baskül","marka":"CAS","model":"DH","kapasite":"600.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/dh-baskul.webp"},{"id":95,"ad":"CAS EB fiyat hesaplamalı baskül 30–600 kg","kategori":"kantar","alt_tur":"Baskül","marka":"CAS","model":"EB","kapasite":"600.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/eb.webp"},{"id":100,"ad":"CAS PB taşınabilir baskül","kategori":"kantar","alt_tur":"Baskül","marka":"CAS","model":"PB","kapasite":null,"birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/pb.webp"},{"id":103,"ad":"CAS XE hassas terazi 300 g–6 kg","kategori":"kantar","alt_tur":"Hassas terazi","marka":"CAS","model":"XE","kapasite":"6.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/xe.webp"},{"id":81,"ad":"Baykon BX21 indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"Baykon","model":"BX21","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/indikator.svg"},{"id":98,"ad":"CAS BI-200 indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"BI-200","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/bi-200.webp"},{"id":101,"ad":"CAS CI-200SC paslanmaz indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"CI-200SC","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ci-200sc.webp"},{"id":79,"ad":"CAS CI-201A indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"CI-201A","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ci-200a.webp"},{"id":80,"ad":"CAS DB-I indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"DB-I","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/db-i.webp"},{"id":106,"ad":"CAS DH indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"DH / DH-C","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/dh.webp"},{"id":84,"ad":"CAS NT-501A indikatör","kategori":"kantar","alt_tur":"İndikatör","marka":"CAS","model":"NT-501A","kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/nt-501a.webp"},{"id":33,"ad":"Kantar indikatörü","kategori":"kantar","alt_tur":"İndikatör","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/indikator.svg"},{"id":88,"ad":"CAS U palet baskülü 600–2000 kg","kategori":"kantar","alt_tur":"Palet baskülü","marka":"CAS","model":"U","kapasite":"2000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/u-baskul.webp"},{"id":72,"ad":"Platform kantar 1,5×1,5 m (1,5 t)","kategori":"kantar","alt_tur":"Platform kantar","marka":null,"model":null,"kapasite":"1500.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/platform-kantar.svg"},{"id":107,"ad":"CAS platform baskül 120×120 cm 1,5/2 t","kategori":"kantar","alt_tur":"Platform kantar","marka":"CAS","model":"Zemin üstü çift şase","kapasite":"2000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/platform-cift-sase.webp"},{"id":82,"ad":"Desis BW platform kantar 1500/2000 kg","kategori":"kantar","alt_tur":"Platform kantar","marka":"Desis (ETS Elektronik Tartı)","model":"BW","kapasite":"2000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/platform-kantar.svg"},{"id":86,"ad":"CAS platform baskül 150×150 cm 1,5/3 t","kategori":"kantar","alt_tur":"Platform kantar","marka":"CAS","model":"Zemin üstü çift şase","kapasite":"3000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/platform-cift-sase.webp"},{"id":99,"ad":"CAS platform baskül 150×200 cm 1,5/3 t","kategori":"kantar","alt_tur":"Platform kantar","marka":"CAS","model":"Zemin üstü çift şase","kapasite":"3000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/platform-cift-sase.webp"},{"id":69,"ad":"Platform kantar 2×2 m (3 t)","kategori":"kantar","alt_tur":"Platform kantar","marka":null,"model":null,"kapasite":"3000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/platform-kantar.svg"},{"id":57,"ad":"Platform kantar 2,5×2,5 m (5 t)","kategori":"kantar","alt_tur":"Platform kantar","marka":null,"model":null,"kapasite":"5000.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/platform-kantar.svg"},{"id":31,"ad":"Platform kantar","kategori":"kantar","alt_tur":"Platform kantar","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/platform-kantar.svg"},{"id":71,"ad":"Hassas terazi 0,01 g","kategori":"kantar","alt_tur":"Terazi","marka":null,"model":null,"kapasite":"0.60","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/hassas-terazi.svg"},{"id":64,"ad":"Tezgâh terazisi 15 kg","kategori":"kantar","alt_tur":"Terazi","marka":null,"model":null,"kapasite":"15.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/terazi.svg"},{"id":96,"ad":"CAS ED-H tartım terazisi 3/6/15/30 kg","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"ED-H","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ed.webp"},{"id":104,"ad":"CAS FW500 su korumalı paslanmaz terazi 6/15/30 kg","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"FW500","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/fw500.webp"},{"id":94,"ad":"CAS PR II D tartım terazisi 6/15/30 kg","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"PR II D","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/pr-ii-d.webp"},{"id":78,"ad":"CAS SW-II terazi 15/30 kg","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"SW-II","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/sw-ii.webp"},{"id":89,"ad":"CAS SW-II-W su korumalı terazi 6/15/30 kg","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"SW-II-W","kapasite":"30.00","birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/sw-ii-w.webp"},{"id":93,"ad":"CAS ED tartım terazisi","kategori":"kantar","alt_tur":"Terazi","marka":"CAS","model":"ED","kapasite":null,"birim":"kg","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/cas/ed.webp"},{"id":32,"ad":"Hassas terazi","kategori":"kantar","alt_tur":"Terazi","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/hassas-terazi.svg"},{"id":30,"ad":"Tır kantarı (60 t)","kategori":"kantar","alt_tur":"Tır kantarı","marka":null,"model":null,"kapasite":null,"birim":"adet","aciklama":null,"fiyat":null,"dolum":null,"gorsel":"/urunler/tir-kantari.svg"}]}]};
+const $ = (s, k = document) => k.querySelector(s), $$ = (s, k = document) => [...k.querySelectorAll(s)];
+const IK = { flame: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12c2 -2.96 0 -7 -1 -8c0 3.038 -1.773 4.741 -3 6c-1.226 1.26 -2 3.24 -2 5a6 6 0 1 0 12 0c0 -1.532 -1.056 -3.94 -2 -5c-1.786 3 -2.791 3 -4 2z" /></svg>', 'shield-check': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.46 20.846a12 12 0 0 1 -7.96 -14.846a12 12 0 0 0 8.5 -3a12 12 0 0 0 8.5 3a12 12 0 0 1 -.09 7.06" /><path d="M15 19l2 2l4 -4" /></svg>', spray: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 10m0 2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-4a2 2 0 0 1 -2 -2z" /><path d="M6 10v-4a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v4" /><path d="M15 7h.01" /><path d="M18 9h.01" /><path d="M18 5h.01" /><path d="M21 3h.01" /><path d="M21 7h.01" /><path d="M21 11h.01" /><path d="M10 7h1" /></svg>', wa: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9" /><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1" /></svg>', sagUst: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M17 7l-10 10" /><path d="M8 7l9 0l0 9" /></svg>', solUst: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7l10 10" /><path d="M16 7l-9 0l0 9" /></svg>', uyari: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 9v4" /><path d="M10.363 3.591l-8.106 13.534a1.914 1.914 0 0 0 1.636 2.871h16.214a1.914 1.914 0 0 0 1.636 -2.87l-8.106 -13.536a1.914 1.914 0 0 0 -3.274 0z" /><path d="M12 16h.01" /></svg>', x: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>', torbaArti: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.5 21h-3.926a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304h11.339a2 2 0 0 1 1.977 2.304l-.263 1.708" /><path d="M16 19h6" /><path d="M19 16v6" /><path d="M9 11v-5a3 3 0 0 1 6 0v5" /></svg>', tamam: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>', eksi: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /></svg>', arti: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>', sol: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>', sag: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>', ara: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>',
+	building: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M9 8l1 0" /><path d="M9 12l1 0" /><path d="M9 16l1 0" /><path d="M14 8l1 0" /><path d="M14 12l1 0" /><path d="M14 16l1 0" /><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16" /></svg>', 'building-store': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21l18 0" /><path d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2 -4h14l2 4" /><path d="M5 21l0 -10.15" /><path d="M19 21l0 -10.15" /><path d="M9 21v-4a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v4" /></svg>', 'building-warehouse': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21v-13l9 -4l9 4v13" /><path d="M13 13h4v8h-10v-6h6" /><path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" /></svg>', home: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>', tool: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" /></svg>', 'car-garage': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 20a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M15 20a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M5 20h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" /><path d="M3 6l9 -4l9 4" /></svg>', car: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5" /></svg>',
+	bolt: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11" /></svg>', server: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M3 12m0 3a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v2a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3z" /><path d="M7 8l0 .01" /><path d="M7 16l0 .01" /></svg>', flask: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 3l6 0" /><path d="M10 9l4 0" /><path d="M10 3v6l-4 11a.7 .7 0 0 0 .5 1h11a.7 .7 0 0 0 .5 -1l-4 -11v-6" /></svg>', 'chef-hat': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c1.918 0 3.52 1.35 3.91 3.151a4 4 0 0 1 2.09 7.723l0 7.126h-12v-7.126a4 4 0 1 1 2.092 -7.723a4 4 0 0 1 3.908 -3.151z" /><path d="M6.161 17.009l11.839 -.009" /></svg>', 'gas-station': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 11h1a2 2 0 0 1 2 2v3a1.5 1.5 0 0 0 3 0v-7l-3 -3" /><path d="M4 20v-14a2 2 0 0 1 2 -2h6a2 2 0 0 1 2 2v14" /><path d="M3 20l12 0" /><path d="M18 7v1a1 1 0 0 0 1 1h1" /><path d="M4 11l10 0" /></svg>', sailboat: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M2 20a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1a2.4 2.4 0 0 1 2 -1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2 -1" /><path d="M4 18l-1 -3h18l-1 3" /><path d="M11 12h7l-7 -9v9" /><path d="M8 7l-2 5" /></svg>', archive: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" /><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-10" /><path d="M10 12l4 0" /></svg>', engine: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 10v6" /><path d="M12 5v3" /><path d="M10 5h4" /><path d="M5 13h-2" /><path d="M6 10h2l2 -2h3.382a1 1 0 0 1 .894 .553l1.448 2.894a1 1 0 0 0 .894 .553h1.382v-2h2a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-2v-2h-3v2a1 1 0 0 1 -1 1h-3.465a1 1 0 0 1 -.832 -.445l-1.703 -2.555h-2v-6z" /></svg>', tent: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11 14l4 6h6l-9 -16l-9 16h6l4 -6" /></svg>', 'bucket-droplet': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 16l1.465 1.638a2 2 0 1 1 -3.015 .099l1.55 -1.737z" /><path d="M13.737 9.737c2.299 -2.3 3.23 -5.095 2.081 -6.245c-1.15 -1.15 -3.945 -.217 -6.244 2.082c-2.3 2.299 -3.231 5.095 -2.082 6.244c1.15 1.15 3.946 .218 6.245 -2.081z" /><path d="M7.492 11.818c.362 .362 .768 .676 1.208 .934l6.895 4.047c1.078 .557 2.255 -.075 3.692 -1.512c1.437 -1.437 2.07 -2.614 1.512 -3.692c-.372 -.718 -1.72 -3.017 -4.047 -6.895a6.015 6.015 0 0 0 -.934 -1.208" /></svg>',
+	bulb: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12h1m8 -9v1m8 8h1m-15.4 -6.4l.7 .7m12.1 -.7l-.7 .7" /><path d="M9 16a5 5 0 1 1 6 0a3.5 3.5 0 0 0 -1 3a2 2 0 0 1 -4 0a3.5 3.5 0 0 0 -1 -3" /><path d="M9.7 17l4.6 0" /></svg>', 'radar-2': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M15.51 15.56a5 5 0 1 0 -3.51 1.44" /><path d="M18.832 17.86a9 9 0 1 0 -6.832 3.14" /><path d="M12 12v9" /></svg>', 'bell-ringing': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6" /><path d="M9 17v1a3 3 0 0 0 6 0v-1" /><path d="M21 6.727a11.05 11.05 0 0 0 -2.794 -3.727" /><path d="M3 6.727a11.05 11.05 0 0 1 2.792 -3.727" /></svg>', 'shield-half': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" /><path d="M12 3v18" /></svg>', 'fire-hydrant': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 21h14" /><path d="M17 21v-5h1a1 1 0 0 0 1 -1v-2a1 1 0 0 0 -1 -1h-1v-4a5 5 0 0 0 -10 0v4h-1a1 1 0 0 0 -1 1v2a1 1 0 0 0 1 1h1v5" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M6 8h12" /></svg>', door: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 12v.01" /><path d="M3 21h18" /><path d="M6 21v-16a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v16" /></svg>', scale: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 20l10 0" /><path d="M6 6l6 -1l6 1" /><path d="M12 3l0 17" /><path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" /><path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" /></svg>' };
+const ik = (ad) => `<i class="ti" aria-hidden="true">${IK[ad] ?? IK.flame}</i>`;
+const kacir = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+const TL = (n) => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' ₺';
+const kg = (n) => String(Number(n)).replace('.', ',') + ' kg';
+const azHareket = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const dar = () => innerWidth < 760, sahneDar = () => innerWidth < 1180;
+
+// ── Veri: katalog (dondurulmuş /api/vitrin çıktısı) + müşteriye dönük sunum bilgisi ──
+const URUN = new Map();
+VERI.bolumler.forEach((b) => b.urunler.forEach((u) => URUN.set(u.id, { ...u, fiyat: u.fiyat == null ? null : Number(u.fiyat), dolum: u.dolum == null ? null : Number(u.dolum), bolum: b.kategori, kurum: b.kurum })));
+const fiyatWa = (u) => `https://wa.me/905334077557?text=${encodeURIComponent(`Merhaba, "${u.ad}" için fiyat almak istiyorum.`)}`; // 2026-10-14: fiyat yerine WhatsApp
+const KURUM = Object.fromEntries(VERI.kurumlar.map((k) => [k.kisa_ad, k]));
+const ELLE = [['Pimi çekin', 'Tüpü dik tutun, emniyet pimini mühürle birlikte çekip çıkarın.'], ['Ateşin dibine yöneltin', '2–3 metre uzakta durun; ucu alevin değil yanan maddenin dibine tutun.'],
+	['Tetiği sıkın', 'Tetiği sonuna kadar sıkın; bırakınca akış durur.'], ['Sağa sola süpürün', 'Ucu yelpaze gibi sallayarak ateş sönene kadar ilerleyin.']];
+const OTOMATIK = [['Riskin üstüne takılır', 'Korunacak cihazın ya da alanın hemen üstüne sabitlenir.'], ['Isıyı algılar', 'Ortam ısısı eşiği aşınca ısıya duyarlı uç kendiliğinden açılır.'],
+	['Kendiliğinden boşalır', 'Kimse yokken de çalışır; söndürücü maddeyi doğrudan yangının üstüne bırakır.'], ['Yeniden dolum', 'Boşalan söndürücü dolum ve kontrol için servise alınır.']];
+// Görsele özel noktalar (görselin 2:3 kutusuna göre oran): g = basınç göstergesi, u = püskürtme ucu (toz buradan çıkar)
+const GORSEL = { 'kkt-6kg': { g: [0.68, 0.17], u: [0.255, 0.875] }, 'kkt-4kg': { g: [0.6, 0.15], u: [0.255, 0.86] }, 'kkt-12kg': { g: [0.63, 0.17], u: [0.245, 0.87] }, 'kkt-9kg': { g: [0.59, 0.13], u: [0.25, 0.86] }, 'co2-5kg': { u: [0.22, 0.83] } };
+const BOY = (k) => (k <= 1 ? 0.52 : k <= 2 ? 0.58 : k <= 4 ? 0.64 : k <= 5 ? 0.72 : k <= 6 ? 0.74 : k <= 9 ? 0.8 : k <= 12 ? 0.84 : k <= 25 ? 0.88 : 0.92);
+// Söndürücü aileleri: listede tek raf kartı, ürün sayfasında boylar arasında ray geçişi
+const AILE = [
+	{ kod: 'kkt', ad: 'KKT yangın tüpü', baslik: ['Yangın', 'tüpü'], madde: 'ABC kuru kimyevi toz', sinif: 'A B C', ozet: 'Katı, sıvı ve gaz yangınlarında etkili kuru kimyevi toz.', adim: ELLE, vars: 1,
+		boylar: [[25, 'Otomobil için; torpido ya da bagajda taşınır.'], [8, 'Otomobil ve hafif ticari araçlar için.'], [1, 'İş yeri, apartman ve depolar için en çok tercih edilen boy.'], [2, 'Depo, fabrika ve geniş alanlar için yüksek kapasite.'], [19, 'Tekerlekli; fabrika ve geniş depo alanları için.'], [9, 'Tekerlekli; sanayi tesisi ve açık saha için en yüksek kapasite.']],
+		alan: [['building', 'Ofis'], ['building-store', 'Dükkân'], ['building-warehouse', 'Depo'], ['home', 'Apartman'], ['tool', 'Atölye'], ['car-garage', 'Otopark']],
+		uyari: ['Mutfak yağ yangınında ve hassas elektronikte önerilmez.', 'Yağ yangını için davlumbaz tipi, elektrik panosu ve sunucu odası için CO₂ ya da FM-200 seçin; toz cihazlara zarar verir.'] },
+	{ kod: 'co2', ad: 'CO₂ tüpü', baslik: ['CO₂', 'tüpü'], madde: 'Karbondioksit gazı', sinif: 'B', sinifNot: 've elektrik', ozet: 'Elektrik panosu ve hassas cihazlarda iz bırakmadan söndürür.', adim: ELLE,
+		boylar: [[3, 'Pano odası, ofis ve küçük sunucu odaları için.'], [15, 'Tekerlekli; büyük pano odaları ve jeneratör alanları için.']],
+		alan: [['bolt', 'Elektrik panosu'], ['server', 'Sunucu odası'], ['flask', 'Laboratuvar'], ['building', 'Ofis'], ['engine', 'Jeneratör'], ['tool', 'Atölye']],
+		uyari: ['Dar ve kapalı alanda dikkatli kullanın.', 'Gaz ortamdaki oksijeni azaltır. Püskürtürken boruyu çıplak elle tutmayın; soğuk yanığı yapar.'] },
+	{ kod: 'kopuk', ad: 'Köpüklü tüp', baslik: ['Köpüklü', 'tüp'], madde: 'Köpük çözeltisi', sinif: 'A B', ozet: 'Akaryakıt ve boya gibi sıvı yangınlarının üstünü örterek söndürür.', adim: ELLE,
+		boylar: [[4, 'Atölye, boya deposu ve küçük akaryakıt alanları için.'], [18, 'Akaryakıt istasyonu ve geniş depolar için.'], [108, 'Depo, otopark ve sıvı yakıt tankı yanı için.'],
+			[247, 'Tekerlekli; akaryakıt istasyonu ve dolum sahası için.'], [109, 'Tekerlekli; tank sahası ve büyük tesisler için en yüksek kapasite.']],
+		alan: [['gas-station', 'Akaryakıt'], ['bucket-droplet', 'Boya deposu'], ['tool', 'Atölye'], ['building-warehouse', 'Depo'], ['sailboat', 'Tekne'], ['car-garage', 'Otopark']],
+		uyari: ['Elektrikli cihazda ve panoda kullanılmaz.', 'Köpük su bazlıdır, elektriği iletir.'] },
+	{ kod: 'pano', ad: 'Pano tipi söndürücü', baslik: ['Pano tipi', 'söndürücü'], madde: 'FM-200 temiz gaz', sinif: null, ozet: 'Pano içine takılır; ısıyı algılayınca kendiliğinden boşalır, kalıntı bırakmaz.', adim: OTOMATIK,
+		boylar: [[26, 'Küçük sigorta ve kumanda panoları için.'], [24, 'Orta boy elektrik panoları için.'], [10, 'Büyük panolar ve kabinler için.']],
+		alan: [['bolt', 'Elektrik panosu'], ['server', 'Sunucu kabini'], ['engine', 'Jeneratör'], ['sailboat', 'Tekne'], ['building', 'Kontrol odası'], ['tool', 'Makine dairesi']] },
+	{ kod: 'tavan', ad: 'Sprinkli söndürücü', baslik: ['Sprinkli', 'söndürücü'], madde: 'ABC kuru kimyevi toz', sinif: 'A B C', ozet: 'Tavana asılır; ısıyla açılan uç tozu doğrudan aşağı boşaltır.', adim: OTOMATIK,
+		boylar: [[23, 'Kazan dairesi ve küçük depo odaları için.'], [21, 'Geniş kazan dairesi, jeneratör odası ve arşiv için.']],
+		alan: [['flame', 'Kazan dairesi'], ['building-warehouse', 'Depo'], ['engine', 'Jeneratör odası'], ['archive', 'Arşiv'], ['tool', 'Makine dairesi'], ['bolt', 'Trafo']] },
+	{ kod: 'davlumbaz', ad: 'Davlumbaz söndürücü', baslik: ['Davlumbaz', 'söndürücü'], madde: 'Islak kimyasal', sinif: 'A F', ozet: 'Mutfak yağ yangınları için; kızgın yağın üstünü kapatıp soğutur.', adim: OTOMATIK,
+		boylar: [[16, 'Restoran, otel ve yemekhane mutfaklarının davlumbazı için.']],
+		alan: [['chef-hat', 'Restoran'], ['building', 'Otel mutfağı'], ['building-store', 'Kafe'], ['chef-hat', 'Yemekhane'], ['building-store', 'Pastane'], ['flame', 'Fırın']] },
+	{ kod: 'temiz', ad: 'Temiz gazlı tüp', baslik: ['Temiz gazlı', 'tüp'], madde: 'FK-5-1-12 temiz gaz', sinif: 'A B', ozet: 'Kalıntı bırakmaz; elektronik cihaz ve arşiv için.', adim: ELLE,
+		boylar: [[17, 'Sunucu odası, arşiv ve laboratuvar için.']],
+		alan: [['server', 'Sunucu odası'], ['archive', 'Arşiv'], ['flask', 'Laboratuvar'], ['building', 'Ofis'], ['bolt', 'Kontrol odası'], ['building-store', 'Müze']] },
+	// yangın kapısı da aynı ray mantığıyla: tek / çift kanat
+	{ kod: 'kapi', ad: 'Yangın kapısı', baslik: ['Yangın', 'kapısı'], sag: '60 dk', gizli: true, ozet: 'Yangını ve dumanı 60 dakika boyunca öbür tarafta tutar.', boylar: [[27, 'Tek kanat'], [28, 'Çift kanat']] },
+];
+const AILE_ID = new Map();
+AILE.forEach((a) => { a.boylar = a.boylar.filter(([id]) => URUN.has(id)).map(([id, yazi]) => ({ id, yazi, u: URUN.get(id) })); a.boylar.forEach((b) => AILE_ID.set(b.id, a)); });
+// Gövde etiketi: [sol, sağ, yazının başladığı üst, eğim°] görsele oranla — kaptan-app TupSahnesi.tsx GOVDE ile aynı ölçüler
+const GOVDE = { 'co2-10kg': [0.436, 0.636, 0.261, 7], 'co2-5kg': [0.414, 0.705, 0.27], davlumbaz: [0.313, 0.728, 0.373], 'kkt-1kg': [0.257, 0.71, 0.385], 'kkt-2kg': [0.244, 0.668, 0.312],
+	'kkt-4kg': [0.34, 0.73, 0.27], 'kkt-6kg': [0.321, 0.722, 0.27], 'kkt-9kg': [0.341, 0.728, 0.22], 'kkt-12kg': [0.322, 0.766, 0.27], 'kkt-25kg': [0.441, 0.717, 0.236], 'kkt-50kg': [0.271, 0.671, 0.3],
+	'pano-2kg': [0.277, 0.729, 0.375], 'pano-6kg': [0.312, 0.783, 0.235], 'sprinkli-6kg': [0.16, 0.86, 0.3], 'sprinkli-12kg': [0.16, 0.86, 0.32] };
+// aile → [büyük kod, alt yazı, bant rengi, bant yazısı]; renkler söndürücü renk kodundan (toz mavi, CO₂ siyah, köpük krem, temiz gaz yeşil, ıslak kimyasal sarı)
+const ETIKET = { kkt: ['KKT', 'ABC kuru toz', '#2c66cc'], tavan: ['KKT', 'Sprinkli · otomatik', '#2c66cc'], co2: ['CO₂', 'Karbondioksit', '#15171b'],
+	kopuk: ['KÖPÜK', 'Köpüklü söndürücü', '#eadcae', '#3a3220'], pano: ['FM-200', 'Temiz gaz · pano', '#1d9454'], temiz: ['FK-5-1-12', 'Temiz gazlı', '#1d9454'],
+	davlumbaz: ['ISLAK', 'Islak kimyasal', '#f1c22e', '#3a2e08'] };
+function etiketHtml(u) {
+	const a = AILE_ID.get(u.id), g = GOVDE[gorselAd(u)], e = a && ETIKET[a.kod];
+	if (!g || !e) return '';
+	const [sol, sag, ust, aci = 0] = g, [kod, alt, renk, bantYazi] = e, kure = /^sprinkli/.test(gorselAd(u));
+	const stil = `--x:${((sol + sag) / 2) * 100}%;--w:${(sag - sol) * (kure ? 0.56 : 0.8) * 100}%;--t:${(ust + (kure ? 0.06 : 0.012)) * 100}%;--a:${aci}deg;--renk:${renk};${bantYazi ? `--bant-yazi:${bantYazi};` : ''}--kf:${Math.min(32, 118 / kod.length)}cqw`;
+	return `<span class="etiket" style="${stil}" aria-hidden="true"><i>Yangın söndürücü</i><b>${kacir(kod)}</b><span>${kacir(alt)}</span><em>${(a.sinif ?? '').split(' ').filter(Boolean).map((x) => `<u>${x}</u>`).join('')}<s>${kg(u.kapasite)}</s></em></span>`;
+}
+const tupcuk = (u, img) => (tupMu(u) ? `<span class="tupcuk">${img}${etiketHtml(u)}</span>` : img);
+const YANGIN_IKON = { 60: 'bulb', 68: 'radar-2', 67: 'bell-ringing', 58: 'shield-half', 29: 'fire-hydrant', 28: 'door', 27: 'door' };
+const ikonu = (u) => YANGIN_IKON[u.id] ?? (u.bolum === 'kantar' ? 'scale' : 'flame');
+const gorselAd = (u) => u.gorsel?.match(/([^/]+)\.\w+$/)?.[1];
+const tupMu = (u) => u.gorsel?.startsWith('/tupler/');
+const src = (u) => u.gorsel?.replace(/^\//, '');
+const kunye = (u) => [u.marka, u.model !== u.marka ? u.model : null].filter(Boolean).join(' · ') || u.alt_tur || (u.bolum === 'ysc' ? kg(u.kapasite) : '');
+const kapasite = (u) => (u.kapasite == null ? null : u.birim !== 'kg' ? null : Number(u.kapasite) >= 1000 ? String(Number(u.kapasite) / 1000).replace('.', ',') + ' t' : kg(u.kapasite));
+const wa = (u) => { const k = KURUM[u?.kurum ?? 'KY']; return `https://wa.me/9${k.telefon.replace(/\D/g, '')}` + (u ? `?text=${encodeURIComponent(`Merhaba, kataloğunuzdaki "${u.ad}" hakkında bilgi almak istiyorum.`)}` : ''); };
+
+// ── Dev yazı: harf harf değişim ve kutuya sığdırma ──
+function harfle(el, metin) { el.innerHTML = [...metin].map((h) => `<span class="harf${h === ' ' ? ' bosluk' : ''}">${h === ' ' ? ' ' : kacir(h)}</span>`).join(''); return [...el.children]; }
+function harfCik(el) { return Promise.all([...el.children].map((h, i) => h.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-115%)' }], { duration: azHareket ? 1 : 380, delay: i * 18, easing: 'cubic-bezier(0.6, 0, 0.9, 0.4)', fill: 'forwards' }).finished)); }
+function harfGir(el, metin) { harfle(el, metin).forEach((h, i) => h.animate([{ transform: 'translateY(115%)' }, { transform: 'translateY(0)' }], { duration: azHareket ? 1 : 820, delay: i * 26, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'backwards' })); }
+// yazı boyu içerikten değil kutudan gelir: en uzun satır verilen genişliğe sığacak kadar, üst sınırı geçmeden
+function sigdir(el, genislik, ust) { if (!el || el.hidden) return; el.style.fontSize = '100px';  const w = Math.max(el.offsetWidth, 1); el.style.fontSize = Math.min(ust, (100 * genislik) / w) + 'px'; }
+
+// ── Kaydırdıkça açılma ──
+// Ekrana giren öğeler aynı anda gelenler arasında sırayla belirir; başlıklar satır satır maskeden çıkar, ölçü sayıları sayarak gelir.
+// Gizli hâl yalnız burada kurulur: gözlemci yoksa ya da "hareketi azalt" açıksa hiçbir şey gizlenmez.
+const goz = {};
+function sayarakGel(el) {
+	const m = el.textContent.match(/^(\d+(?:\.\d{3})*)(?:,(\d+))?(.*)$/); if (!m) return;
+	const son = el.textContent, hedef = parseFloat(m[1].replace(/\./g, '') + (m[2] ? '.' + m[2] : '')), ond = m[2]?.length ?? 0, t0 = performance.now();
+	const yaz = (v) => (ond ? v.toFixed(ond).replace('.', ',') : String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, '.')) + m[3];
+	(function adim(t) { const k = Math.min(1, (t - t0) / 1100), e = 1 - Math.pow(1 - k, 3); el.textContent = k < 1 ? yaz(hedef * e) : son; if (k < 1) requestAnimationFrame(adim); })(t0);
+}
+function belirle(liste, anahtar) {
+	goz[anahtar]?.disconnect();
+	if (azHareket || !('IntersectionObserver' in window)) return;
+	const io = goz[anahtar] = new IntersectionObserver((girenler) => {
+		const sirali = girenler.filter((g) => g.isIntersecting).sort((x, y) => (x.target.compareDocumentPosition(y.target) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+		sirali.forEach((g, k) => {
+			const el = g.target; io.unobserve(el); const gec = Math.min(k, 6) * 110;
+			el.style.setProperty('--g', gec + 'ms'); el.style.transitionDelay = gec + 'ms'; el.classList.add('gor');
+			const sayi = el.matches('.olcu') && $(':scope > b', el); if (sayi) setTimeout(() => sayarakGel(sayi), gec + 320);
+			setTimeout(() => { el.classList.remove('bk', 'hbk', 'gor'); el.style.removeProperty('--g'); el.style.transitionDelay = ''; delete el.dataset.v; }, 2800 + gec);
+		});
+	}, { rootMargin: '0px 0px -16% 0px', threshold: 0.1 });
+	liste.forEach((x) => {
+		const [el, v] = Array.isArray(x) ? x : [x, '']; if (v) el.dataset.v = v;
+		if (v === 'baslik') { el.innerHTML = el.innerHTML.split('<br>').map((l, i) => `<span class="hs" style="--s:${i}">${[...l].map((c, n) => `<span class="hc" style="--c:${n}">${kacir(c)}</span>`).join('')}</span>`).join(''); el.classList.add('hbk'); }
+		else el.classList.add('bk');
+		io.observe(el);
+	});
+}
+
+// ───────────────────────── Liste ─────────────────────────
+const BOLUM = [{ kod: 'ysc', kisa: 'Tüpler', baslik: ['Yangın tüpleri'] }, { kod: 'yangin', kisa: 'Güvenlik', baslik: ['Yangın güvenliği'] }, { kod: 'kantar', kisa: 'Tartı', baslik: ['Tartı sistemleri'] }];
+const durum = { bolum: 'ysc', alt: '', arama: '', urun: null, kaydirma: 0 };
+const bolumUrunleri = (kod) => [...URUN.values()].filter((u) => u.bolum === kod);
+
+// Derinlikli pencere: mekân fotoğrafı (sitenin görselleri) + büyük yazı; ürün görseli pencerenin dışında kalır
+const ZEMIN_AILE = { kkt: ['T4-otel-yatay-bos', '50% 45%'], co2: ['T5-fabrika-yatay-bos', '45% 50%'], kopuk: ['T3-belediye-yatay-bos', '50% 50%'], pano: ['I07-panel', '88% 50%'],
+	tavan: ['T2-hastane-yatay-bos', '50% 40%'], davlumbaz: ['T1-konut-yatay-bos', '50% 50%'], temiz: ['T3-belediye-yatay-bos', '25% 50%'] };
+const YAZI_AILE = { kkt: 'KKT', tavan: 'KKT', co2: 'CO₂', kopuk: 'Köpük', pano: 'FM-200', temiz: 'Temiz', davlumbaz: 'Islak' };
+const zeminKart = (u) => u.bolum === 'kantar'
+	? (/hassas/i.test(u.alt_tur ?? u.ad) ? ['K3-hassas', '20% 50%'] : /terazi/i.test(u.alt_tur ?? u.ad) ? ['K2-market', '0% 55%'] : /tır|kamyon|kantar/i.test(u.alt_tur ?? u.ad) ? ['I14-kantar-hava', '60% 60%'] : /indikat/i.test(u.alt_tur ?? u.ad) ? ['K6-tezgah', '20% 50%'] : ['T5-fabrika-yatay-bos', '22% 60%'])
+	: tupMu(u) ? ['T4-otel-yatay-bos', '50% 45%'] : (/dedekt/i.test(u.ad) ? ['I05-dedektor', '60% 20%'] : /dolab/i.test(u.ad) ? ['I08-dolap', '80% 50%'] : /kapı/i.test(u.ad) ? ['I09-kapi', '70% 45%'] : ['I07-panel', '80% 50%']);
+const pencereHtml = ([g, odak], yazi) => `<span class="pencere" aria-hidden="true"><img class="zemin" src="../gorsel/${g}.jpg" style="object-position:${odak}" alt="" loading="lazy"><span class="yazi">${kacir(yazi)}</span></span>`;
+function kartHtml(u) {
+	const tabak = !u.gorsel ? `<div class="tabak ikon">${ik(ikonu(u))}</div>` : `<div class="tabak derin ${tupMu(u) ? 'koyu' : 'acik'}">${pencereHtml(zeminKart(u), kapasite(u) ?? '')}${tupcuk(u, `<img src="${kacir(src(u))}" alt="" loading="lazy" data-g="${u.id}">`)}</div>`;
+	return `<a class="kart" href="#u-${u.id}" data-git="u-${u.id}">${tabak}<h3>${kacir(u.ad)}</h3><span class="kunye">${kacir(kunye(u))}</span><span class="fiyat fiyat-al">Fiyat al →</span></a>`;
+}
+const enKucuk = (l) => { const f = l.filter((x) => x != null); return f.length ? Math.min(...f) : null; };
+function aileHtml(a) {
+	const on = a.boylar.find((b) => Number(b.u.kapasite) === 6) ?? a.boylar[0], enAz = enKucuk(a.boylar.map((b) => b.u.fiyat)), enAzDolum = enKucuk(a.boylar.map((b) => b.u.dolum));
+	return `<article class="aile">
+		<a class="ana" href="#u-${on.id}" data-git="u-${on.id}" aria-label="${kacir(a.ad)}"></a>
+		<div class="resim">${pencereHtml(ZEMIN_AILE[a.kod] ?? ZEMIN_AILE.kkt, YAZI_AILE[a.kod] ?? '')}${tupcuk(on.u, `<img src="${kacir(src(on.u))}" alt="" loading="lazy" data-g="${on.id}">`)}</div>
+		<div class="govde">
+			<h3>${kacir(a.ad)}</h3>
+			<div class="siniflar">${a.sinif ? a.sinif.split(' ').map((s) => `<b>${s}</b>`).join('') : ''}<span>${kacir(a.sinif ? a.sinifNot ?? 'sınıfı' : a.madde)}</span></div>
+			<p>${kacir(a.ozet)}</p>
+			<div class="alt">
+				<div class="boy" aria-label="Boylar">${a.boylar.map((b) => `<a href="#u-${b.id}" data-git="u-${b.id}" aria-label="${kg(b.u.kapasite)}">${String(Number(b.u.kapasite)).replace('.', ',')}</a>`).join('')}<em>kg</em></div>
+				<span class="fiyat fiyat-al">Fiyat al →</span>
+			</div>
+		</div>
+	</article>`;
+}
+function listeCiz(canli = true) {
+	const q = durum.arama.trim().toLocaleLowerCase('tr'), iz = $('#izgara'), altlar = $('#altlar');
+	let html, sayi;
+	if (q) {
+		const l = [...URUN.values()].filter((u) => [u.ad, u.alt_tur, u.marka, u.model].some((a) => a?.toLocaleLowerCase('tr').includes(q)));
+		html = l.map(kartHtml).join('') || `<p class="bos">“${kacir(durum.arama)}” için ürün bulunamadı.</p>`; sayi = l.length; altlar.hidden = true;
+	} else if (durum.bolum === 'ysc') {
+		html = AILE.filter((a) => !a.gizli).map(aileHtml).join(''); sayi = bolumUrunleri('ysc').length; altlar.hidden = true;
+	} else {
+		const hepsi = bolumUrunleri(durum.bolum), turler = [...new Set(hepsi.map((u) => u.alt_tur).filter(Boolean))];
+		altlar.hidden = durum.bolum !== 'kantar';
+		if (!altlar.hidden) altlar.innerHTML = [['', 'Hepsi'], ...turler.map((t) => [t, t])].map(([k, ad]) => `<button type="button" data-alt="${kacir(k)}" aria-pressed="${k === durum.alt}">${kacir(ad)}</button>`).join('');
+		const l = hepsi.filter((u) => !durum.alt || durum.bolum !== 'kantar' || u.alt_tur === durum.alt);
+		html = l.map(kartHtml).join(''); sayi = l.length;
+	}
+	iz.innerHTML = html;
+	const b = BOLUM.find((x) => x.kod === durum.bolum), kurum = KURUM[VERI.bolumler.find((x) => x.kategori === durum.bolum)?.kurum];
+	$('#lMeta').textContent = q ? `${sayi} sonuç` : `${sayi} ürün · ${kurum?.ad ?? ''}`;
+	if (canli) belirle([...iz.children].filter((k) => !k.matches('.bos')), 'liste'); else goz.liste?.disconnect();
+	return b;
+}
+function baslikYaz(satirlar, canli) {
+	const el = $('#lBaslik'), hedef = $$('[data-harf]', el);
+	hedef.forEach((h, i) => { const m = satirlar[i] ?? ''; h.parentElement.hidden = !m; if (h.textContent === m) return; if (canli) harfCik(h).then(() => { harfGir(h, m); listeSigdir(); }); else harfle(h, m); });
+	// yeni metnin boyunu önceden hesapla: gizli bir kopyada ölç
+	if (!canli) listeSigdir();
+}
+function listeSigdir() { const el = $('#lBaslik'); sigdir(el, el.parentElement.clientWidth - (dar() ? 2 * 16 : 2 * 40) - 8, dar() ? 54 : 68); }
+function markaYaz(kod) { const t = 'Kaptan Yangın'; const e = $('#markaAlt'); if (e.textContent !== t) e.textContent = t; }
+function sekmeCiz() {
+	const s = $('#sekme'), i = BOLUM.findIndex((b) => b.kod === durum.bolum);
+	if (!s.querySelector('button')) s.insertAdjacentHTML('beforeend', BOLUM.map((b) => `<button type="button" role="tab" data-b="${b.kod}">${b.kisa}<small>${bolumUrunleri(b.kod).length}</small></button>`).join(''));
+	$$('button', s).forEach((d) => d.setAttribute('aria-selected', String(d.dataset.b === durum.bolum))); markaYaz(durum.bolum);
+	$('.gosterge', s).style.transform = `translateX(${i * 100}%)`;
+}
+function bolumSec(kod) {
+	if (kod === durum.bolum && !durum.arama) return;
+	durum.bolum = kod; durum.alt = ''; araKapat(false);
+	sekmeCiz(); baslikYaz(BOLUM.find((b) => b.kod === kod).baslik, true); listeCiz();
+	try { history.replaceState(null, '', '#' + kod); } catch {}
+}
+function araKapat(ciz = true) { const c = $('#cubuk'); if (!c.classList.contains('ara-acik')) return; c.classList.remove('ara-acik'); $('#ara').value = ''; durum.arama = ''; $('#araDugme').innerHTML = ik('ara'); $('#araDugme').setAttribute('aria-expanded', 'false'); if (ciz) { baslikYaz(BOLUM.find((b) => b.kod === durum.bolum).baslik, true); listeCiz(); } }
+$('#sekme').addEventListener('click', (e) => { const d = e.target.closest('button'); if (d) bolumSec(d.dataset.b); });
+$('#altlar').addEventListener('click', (e) => { const d = e.target.closest('button'); if (!d) return; durum.alt = d.dataset.alt; listeCiz(); d.scrollIntoView?.({ inline: 'center', block: 'nearest', behavior: 'smooth' }); });
+$('#araDugme').addEventListener('click', () => {
+	const c = $('#cubuk');
+	if (c.classList.contains('ara-acik')) return araKapat();
+	c.classList.add('ara-acik'); $('#araDugme').innerHTML = ik('x'); $('#araDugme').setAttribute('aria-expanded', 'true'); $('#ara').focus({ preventScroll: true });
+});
+$('#ara').addEventListener('input', (e) => { const once = !!durum.arama.trim(); durum.arama = e.target.value; const simdi = !!durum.arama.trim(); if (once !== simdi) baslikYaz(simdi ? ['Arama'] : BOLUM.find((b) => b.kod === durum.bolum).baslik, true); listeCiz(false); });
+$('#ara').addEventListener('keydown', (e) => { if (e.key === 'Escape') araKapat(); });
+function iletisimCiz() {
+	$('#iletisim').innerHTML = `<div class="logo"><img src="kaptan-logo.png" alt=""><p>Kaptan Yangın</p></div>` + VERI.kurumlar.map((k) => `<div><b>${kacir(k.ad)}</b>${[k.telefon, k.eposta, k.web, k.adres].filter(Boolean).map((s) => `<span>${kacir(s)}</span>`).join('')}</div>`).join('')
+		+ `<p class="yasal">Fiyat ve stok bilgisi için WhatsApp'tan yazın: 0533 407 75 57. Görseller temsilidir.</p>`;
+}
+
+// ───────────────────────── Ürün sayfası ─────────────────────────
+let S = null; // açık ürün sahnesinin durumu
+function model(id) {
+	const u = URUN.get(id), a = AILE_ID.get(id);
+	if (a) return { a, baslik: a.baslik, vars: a.boylar.map((b) => ({ id: b.id, u: b.u, yazi: b.yazi, etiket: a.kod === 'kapi' ? b.yazi : kg(b.u.kapasite), sag: a.sag ?? kg(b.u.kapasite) })), i: a.boylar.findIndex((b) => b.id === id) };
+	const ad = (u.bolum === 'kantar' ? u.alt_tur : null) ?? u.ad.replace(/\s*\(.*\)/, ''), kelime = ad.split(' ');
+	const baslik = kelime.length > 1 ? [kelime.slice(0, Math.ceil(kelime.length / 2)).join(' '), kelime.slice(Math.ceil(kelime.length / 2)).join(' ')] : [ad];
+	return { a: null, baslik, vars: [{ id, u, yazi: '', etiket: '', sag: u.model && u.model.length <= 9 ? u.model : kapasite(u) ?? '' }], i: 0 };
+}
+function notlarHtml(m, v) {
+	const a = m.a, u = v.u; let l = [];
+	if (a?.madde) l = [['flame', a.madde.replace('kuru kimyevi toz', 'kuru toz'), a.ozet], ['shield-check', '12 ayda bir dolum', '12 ayda bir dolum ve kontrol']];
+	else if (a?.kod === 'kapi') l = [['door', '60 dk yangın dayanımı', a.ozet]];
+	else if (u.bolum === 'kantar') l = [['scale', kapasite(u) ? kapasite(u) + ' kapasite' : (u.alt_tur ?? 'Tartı sistemi'), u.alt_tur ?? 'Tartı sistemi'], ['shield-check', 'Muayenesi 2 yılda bir', 'Muayenesi 2 yılda bir']];
+	if (!l.length) return '';
+	return `<div class="notlar">${l.map(([i, kisa, uz]) => `<div class="not"><span class="simge cam">${ik(i)}</span><p><span class="kisa">${kacir(kisa)}</span><span class="uz">${kacir(uz)}</span></p></div>`).join('')}</div>`;
+}
+const katmanHtml = (u) => !u.gorsel ? ik(ikonu(u)) : `<img src="${kacir(src(u))}" alt="">` + (tupMu(u) ? etiketHtml(u) : '');
+const katmanSinif = (u) => 'katman' + (!u.gorsel ? ' ikonlu cam' : tupMu(u) ? '' : ' tabakli');
+function olculer(m, v) {
+	const u = v.u, a = m.a, l = [];
+	if (a?.madde) { l.push([kg(u.kapasite), a.madde]); if (a.sinif) l.push([a.sinif, 'Yangın sınıfı' + (a.sinifNot ? ' ' + a.sinifNot : '')]); else l.push(['12 ay', 'Dolum ve kontrol']);
+		return olcuHtml(l); }
+	else { if (kapasite(u)) l.push([kapasite(u), 'Kapasite']); if (u.marka) l.push([u.marka.split(' ')[0], 'Marka']); if (u.bolum === 'kantar') l.push(['2 yıl', 'Periyodik muayene']); if (a?.sag) l.push([a.sag, 'Yangın dayanımı']); }
+	return olcuHtml(l);
+}
+const olcuHtml = (l) => l.slice(0, 4).map(([b, s]) => `<div class="olcu"><b>${kacir(b)}</b><span>${kacir(s)}</span></div>`).join('');
+function teknik(m, v) {
+	const u = v.u, a = m.a, bos = 'Üretici föyünden eklenecek';
+	const s = a?.madde ? [['Söndürücü madde', `${a.madde}, ${kg(u.kapasite)}`], ['Yangın sınıfı', a.sinif ? a.sinif.split(' ').join(', ') + (a.sinifNot ? ' ' + a.sinifNot : '') : null], ['Söndürme gücü', null], ['Boşalma süresi', null], ['Çalışma sıcaklığı', null], ['Dolu ağırlık · boy', null]]
+		: [['Tür', u.alt_tur ?? u.ad], ['Marka', u.marka], ['Model', u.model], ['Kapasite', kapasite(u)], ['Satış birimi', u.birim === 'kg' ? 'adet' : u.birim]].filter(([, d]) => d);
+	return s.map(([k, d]) => `<tr><td>${kacir(k)}</td>${d ? `<td>${kacir(d)}</td>` : `<td class="bos">${bos}</td>`}</tr>`).join('');
+}
+function olcuSigdir() { $$('#bilgi .olcu b').forEach((b) => { b.style.fontSize = ''; let f = parseFloat(getComputedStyle(b).fontSize); while (b.scrollWidth > b.clientWidth + 1 && f > 20) { f -= 2; b.style.fontSize = f + 'px'; } }); }
+function benzerler(m, v) {
+	if (m.a && !m.a.gizli) return AILE.filter((a) => a !== m.a && !a.gizli).map((a) => a.boylar.find((b) => Number(b.u.kapasite) === 6) ?? a.boylar[0]).map((b) => ({ ...b.u, ad: AILE_ID.get(b.id).ad }));
+	return [...URUN.values()].filter((u) => u.bolum === v.u.bolum && u.id !== v.id && !m.vars.some((x) => x.id === u.id)).sort((x, y) => (y.alt_tur === v.u.alt_tur) - (x.alt_tur === v.u.alt_tur)).slice(0, 10);
+}
+function bilgiHtml(m, v) {
+	const a = m.a;
+	return `<p class="giris">${kacir(a?.ozet ?? v.u.ad)} <span id="girisNot">${kacir(a && a.kod !== 'kapi' ? v.yazi : '')}</span></p>
+	<div class="olculer" id="olculer">${olculer(m, v)}</div>
+	${a?.adim ? `<section class="bolum"><h2>${a.adim === ELLE ? 'Nasıl<br>kullanılır' : 'Nasıl<br>çalışır'}</h2><div class="adimlar">${a.adim.map(([b, s], i) => `<div class="adim"><i>0${i + 1}</i><b>${b}</b><span>${s}</span></div>`).join('')}</div></section>` : ''}
+	${a?.alan ? `<section class="bolum"><h2>Nerede<br>kullanılır</h2><div><div class="alanlar">${a.alan.map(([i, ad]) => `<div>${ik(i)}${ad}</div>`).join('')}</div>${a.uyari ? `<p class="uyari">${ik('uyari')}<span><b>${a.uyari[0]}</b> ${a.uyari[1]}</span></p>` : ''}</div></section>` : ''}
+	<section class="bolum"><h2>Teknik<br>bilgiler</h2><table id="teknik">${teknik(m, v)}</table></section>
+	<section class="bolum tam"><h2>${m.a && !m.a.gizli ? 'Diğer söndürücüler' : 'Benzer ürünler'}</h2><div class="serit">${benzerler(m, v).map(kartHtml).join('')}</div></section>`;
+}
+function urunCiz(id, vt) {
+	const m = model(id), v = m.vars[m.i], u = v.u, cok = m.vars.length > 1, a = m.a;
+	$('#urunSayfa').innerHTML = `<div class="kap"><section class="sahne${vt ? ' vt' : ''}" id="sahne">
+		<div class="isik"></div>
+		<h1 class="dev sol" aria-label="${kacir(u.ad)}">${m.baslik.map((s) => `<span class="satir"><span data-harf>${kacir(s)}</span></span>`).join('')}</h1>
+		<p class="dev sag"${v.sag ? '' : ' hidden'}><span class="satir"><span id="kilo" data-harf>${kacir(v.sag)}</span></span></p>
+		${notlarHtml(m, v)}
+		<p class="sag-yazi" id="sagYazi">${kacir(a && a.kod !== 'kapi' ? v.yazi : '')}</p>
+		<div class="golge"></div>
+		<div class="urun${tupMu(u) ? '' : ' kare'}" id="urun"><div class="dondur" id="dondur">
+			<div class="acilis"><div class="${katmanSinif(u)}" id="katA">${katmanHtml(u)}</div><div class="katman" id="katB" hidden></div></div>
+			<span id="noktalar"></span>
+		</div></div>
+		<p class="dev birim" id="birim" aria-hidden="true"></p>
+		<canvas class="duman" id="duman" aria-hidden="true"></canvas>
+		<button type="button" class="puskurt cam" id="puskurt" aria-pressed="false" hidden>${ik('spray')}Püskürt</button>
+		<a class="al cam" id="al" href="${fiyatWa(u)}" target="_blank" rel="noopener" aria-label="Fiyat al">${ik('wa')}<b id="fiyat">Fiyat al</b><small>WhatsApp</small></a>
+		${cok ? `<div class="boylar" id="boylar" role="group" aria-label="Seçenekler">
+			<button type="button" class="ok cam" data-yon="-1" aria-label="Önceki">${ik('sol')}</button>
+			<div class="sayfa cam">${m.vars.map((x, i) => `<button type="button" data-i="${i}" aria-pressed="${i === m.i}" aria-label="${kacir(x.etiket)}"></button>`).join('')}</div>
+			<button type="button" class="ok cam" data-yon="1" aria-label="Sonraki">${ik('sag')}</button>
+		</div>` : ''}
+		<span class="not-temsili">Görsel temsilidir</span>
+	</section><div class="bilgi" id="bilgi">${bilgiHtml(m, v)}</div></div>`;
+	$$('#sahne [data-harf]').forEach((el) => harfle(el, el.textContent));
+	const sahne = $('#sahne');
+	S = { m, i: m.i, sahne, urun: $('#urun'), onde: $('#katA'), arkada: $('#katB'), mesgul: false, parcalar: [], alevler: [], dumanlar: [], ekranToz: [], jet: false, ates: { guc: 0, hedef: 0 }, perdeBas: 0, dumanBitis: 0, calisiyor: false, sahneMesgul: false };
+	sahneOlc(); noktalariCiz(); altCubukYaz(); gostergeKoy();
+	const hazir = () => { if (S?.sahne !== sahne || sahne.classList.contains('hazir')) return; sahneOlc(); void sahne.offsetHeight; sahne.classList.add('hazir'); setTimeout(() => sahne.classList.add('goster'), vt ? 700 : 1300); };
+	if (vt) hazir(); else { const img = $('img', S.onde); (img ? img.decode() : Promise.resolve()).then(hazir, hazir); setTimeout(hazir, 1200); }
+	sahneBagla(sahne);
+	olcuSigdir();
+	const L = (sel, v) => $$(sel).map((e) => [e, v]);
+	belirle([...L('#bilgi .giris', ''), ...L('#bilgi .olcu', 'cizgi'), ...L('#bilgi .bolum h2', 'baslik'), ...L('#bilgi .adim', 'cizgi'), ...L('#bilgi .alanlar > div', 'pop'), ...L('#bilgi .uyari', 'sol'), ...L('#bilgi tr', 'sol'), ...L('#bilgi .serit .kart', 'kart')], 'urun');
+}
+// Görselin dolu (saydam olmayan) kısmının yatay sınırları, görsel genişliğine oranla (hortum ve sap dahil); ilk ölçümde önbelleğe girer.
+// Görsel okunamazsa (file:// ile açınca tuval kilitlenir) güvenli pay döner, önbelleğe girmez.
+const KUTU = new Map();
+function doluKutu(u) {
+	const yol = src(u); if (KUTU.has(yol)) return KUTU.get(yol);
+	const img = $$('#urun img').find((x) => x.getAttribute('src') === yol && x.complete && x.naturalWidth);
+	if (!img) return [0.12, 0.92];
+	try {
+		const c = document.createElement('canvas'), W = (c.width = 160), H = (c.height = Math.round((160 * img.naturalHeight) / img.naturalWidth)), g = c.getContext('2d', { willReadFrequently: true });
+		g.drawImage(img, 0, 0, W, H); const d = g.getImageData(0, 0, W, H).data; let l = W, r = -1;
+		for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (d[(y * W + x) * 4 + 3] > 40) { if (x < l) l = x; if (x > r) r = x; }
+		const k = r < 0 ? [0.12, 0.92] : [l / W, (r + 1) / W]; KUTU.set(yol, k); return k;
+	} catch { return [0.12, 0.92]; }
+}
+function sahneOlc() {
+	if (!S) return; const { sahne, urun, m, i } = S, u = m.vars[i].u, w = sahne.clientWidth, h = sahne.clientHeight, d = sahneDar(), k = 2 * (dar() ? 16 : 40);
+	let th;
+	if (tupMu(u)) th = d ? Math.min(h * BOY(Number(u.kapasite)) * 0.7, h * 0.76 - 128) : h * BOY(Number(u.kapasite));
+	else th = Math.min(h * (d ? 0.4 : 0.52), w * (d ? 0.62 : 0.36));
+	urun.style.height = th + 'px';
+	const sol = $('.dev.sol', sahne), sag = $('.dev.sag', sahne);
+	sigdir(sol, d ? w - k : w * 0.4, d ? 60 : 184);
+	if (!sag || sag.hidden) return;
+	if (!d) { [urun, $('.golge', sahne)].forEach((e) => (e.style.left = '')); sahne.classList.remove('ayri-kilo'); $$('.harf.yok', sag).forEach((x) => x.classList.remove('yok')); sag.style.removeProperty('--bosluk'); ['top', 'left', 'right', 'marginInline', 'translate'].forEach((x) => (sag.style[x] = '')); return sigdir(sag, w * 0.38, 200); }
+	// telefon/tablet (Berkin 2026-10-06): tüp biraz sağa kayar; sayı kocaman, tüpün solunda ve tamamen açıkta (hortum dahil hiçbir şey üstünden geçmez).
+	// Birim (kg) ayrı katmanda tüpün önünde, sağda, küçük; hep okunur. Sayı sepet düğmesine inmez.
+	const bos = tupMu(u) && /^\d/.test(sag.textContent) && $('.harf.bosluk', sag), birim = $('#birim', sahne);
+	const harfler = [...$$('.harf', sag)], bi = harfler.indexOf(bos);
+	harfler.forEach((x, k) => x.classList.toggle('yok', !!bos && k >= bi));
+	sahne.classList.toggle('ayri-kilo', !!bos);
+	['top', 'left', 'right', 'marginInline', 'translate'].forEach((x) => (sag.style[x] = '')); sag.style.removeProperty('--bosluk');
+	const kay = bos ? Math.round(w * 0.1) : 0; [urun, $('.golge', sahne)].forEach((e) => (e.style.left = kay ? `calc(50% + ${kay}px)` : ''));
+	if (!bos) { sag.style.top = '100px'; sag.style.left = 'auto'; sag.style.right = 'var(--kenar)'; sag.style.marginInline = '0'; return sigdir(sag, w * 0.5, 96); }
+	const kenar = dar() ? 16 : 40, uw = th * (2 / 3), ux = (w - uw) / 2 + kay, [gl, gr] = GOVDE[gorselAd(u)] ?? [0.3, 0.72], [dl] = doluKutu(u);
+	const tupSol = ux + Math.min(dl, gl) * uw, govdeSag = ux + gr * uw, tupUst = h - h * 0.24 - th, alUst = h - h * 0.24 - $('#al', sahne).offsetHeight;
+	sag.style.fontSize = '100px'; const nw = sag.offsetWidth / 100;
+	const T = tupUst + th * 0.2, fs = Math.max(56, Math.min(dar() ? 260 : 380, (tupSol - 10 - kenar) / nw, (alUst - 14 - T) / 0.86));
+	sag.style.fontSize = fs + 'px';
+	const sw = sag.offsetWidth, x0 = Math.max(kenar, tupSol - 10 - sw);
+	sag.style.marginInline = '0'; sag.style.right = 'auto'; sag.style.left = x0 + 'px'; sag.style.top = T - fs * 0.06 + 'px';
+	const unit = harfler.slice(bi + 1).map((x) => x.textContent).join('');
+	if (birim.textContent !== unit) birim.textContent = unit;
+	const bf = Math.max(26, Math.min(dar() ? 40 : 56, fs * 0.22)); birim.style.fontSize = bf + 'px';
+	// sağda yer varsa gövdenin sağında; yoksa (tekerlekli, sprinkli) büyük sayının altında, sağa yaslı
+	const bw = birim.offsetWidth, sagda = w - kenar - (govdeSag + 10) >= bw && !/tekerlekli/i.test(u.ad);
+	birim.style.left = (sagda ? govdeSag + 10 : x0 + sw - bw - fs * 0.04) + 'px'; birim.style.top = (sagda ? T + fs * 0.62 - bf : T + fs * 0.82) + 'px';
+}
+function noktalariCiz() {
+	const u = S.m.vars[S.i].u, g = GORSEL[gorselAd(u)] ?? {};
+	$('#noktalar').innerHTML = (g.g ? `<button type="button" class="nokta sag" style="left:${g.g[0] * 100}%;top:${g.g[1] * 100}%" aria-label="Basınç göstergesi"><span class="kapsul cam">Basınç göstergesi</span><span class="dugum"><i class="ti" aria-hidden="true">${IK.sagUst}</i></span></button>` : '')
+		+ (g.g && g.u ? `<button type="button" class="nokta sol" style="left:${(g.u[0] - 0.115) * 100}%;top:${(g.u[1] - 0.045) * 100}%" aria-label="Püskürtme ucu"><span class="kapsul cam">Püskürtme ucu</span><span class="dugum"><i class="ti" aria-hidden="true">${IK.solUst}</i></span></button>` : '');
+	$('#puskurt').hidden = true; S.uc = g.u; // püskürtme şimdilik kapalı (Berkin 2026-10-06): açmak için `= !g.u`
+}
+function gostergeKoy() { if (!S) return; $$('#boylar .sayfa button').forEach((b, k) => b.setAttribute('aria-pressed', String(k === S.i))); $$('#boylar .ok').forEach((o) => (o.disabled = S.i + Number(o.dataset.yon) < 0 || S.i + Number(o.dataset.yon) >= S.m.vars.length)); }
+function altCubukYaz() { const u = S.m.vars[S.i].u; $('#acAd').textContent = u.ad; $('#acFiyat').textContent = 'Fiyat al'; }
+
+// Ray geçişi: eski ürün bir kenardan çıkarken yenisi öbür kenardan aynı hızda girer; ortada hız yönüne yatar, durunca doğrulur.
+async function sec(yeni) {
+	if (!S || yeni === S.i || S.mesgul || S.sahneMesgul || yeni < 0 || yeni >= S.m.vars.length) return;
+	const s = S; s.mesgul = true;
+	const { sahne, m } = s, eski = m.vars[s.i], v = m.vars[yeni], yon = yeni > s.i ? 1 : -1;
+	
+	s.arkada.className = katmanSinif(v.u); s.arkada.innerHTML = katmanHtml(v.u);
+	await $('img', s.arkada)?.decode().catch(() => {});
+	if (S !== s) return;
+	sahne.classList.remove('goster'); s.arkada.hidden = false; s.i = yeni; gostergeKoy();
+	s.urun.classList.toggle('kare', !tupMu(v.u)); sahneOlc();
+	const yol = sahne.clientWidth * (sahneDar() ? 1 : 0.75), sure = azHareket ? 10 : sahneDar() ? 900 : 1150, RAY = 'cubic-bezier(0.77, 0, 0.18, 1)';
+	s.onde.animate([{ transform: 'translateX(0) rotate(0)', opacity: 1 }, { transform: `translateX(${-yon * yol * 0.5}px) rotate(${-yon * 5}deg)`, opacity: 1, offset: 0.55 }, { transform: `translateX(${-yon * yol}px) rotate(${-yon * 2}deg)`, opacity: 0 }], { duration: sure, easing: RAY, fill: 'forwards' });
+	const gir = s.arkada.animate([{ transform: `translateX(${yon * yol}px) rotate(${yon * 2}deg)`, opacity: 0 }, { transform: `translateX(${yon * yol * 0.5}px) rotate(${-yon * 5}deg)`, opacity: 1, offset: 0.45 }, { transform: 'translateX(0) rotate(0)', opacity: 1 }], { duration: sure, easing: RAY, fill: 'forwards' });
+	$('.golge', sahne).animate([{ scale: '1 1', opacity: 1 }, { scale: '0.6 1', opacity: 0.4 }, { scale: '1 1', opacity: 1 }], { duration: sure, easing: RAY });
+	const kilo = $('#kilo');
+	if (eski.sag !== v.sag) harfCik(kilo).then(() => { harfGir(kilo, v.sag); sahneOlc(); });
+	else $$('.dev.sol [data-harf]', sahne).forEach((el, k) => setTimeout(() => harfCik(el).then(() => harfGir(el, el.textContent)), k * 60));
+	const yanlar = $$('.sag-yazi, .notlar', sahne);
+	yanlar.forEach((y) => y.animate([{ opacity: 1, transform: 'translateX(0)' }, { opacity: 0, transform: `translateX(${-yon * 24}px)` }], { duration: 380, easing: 'ease-in', fill: 'forwards' }));
+	setTimeout(() => {
+		if (S !== s) return;
+		if (m.a?.kod !== 'kapi') { $('#sagYazi').textContent = v.yazi; $('#girisNot').textContent = v.yazi; }
+		$('#olculer').innerHTML = olculer(m, v); olcuSigdir(); $('#teknik').innerHTML = teknik(m, v); $('.dev.sol', sahne).setAttribute('aria-label', v.u.ad);
+		yanlar.forEach((y) => { y.getAnimations().forEach((a) => a.cancel()); y.animate([{ opacity: 0, transform: `translateX(${yon * 24}px)` }, { opacity: 1, transform: 'translateX(0)' }], { duration: 700, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'backwards' }); });
+	}, sure * 0.5);
+	// fiyat sayarak değişir
+	$('#al').href = fiyatWa(v.u); // fiyat gösterilmez (2026-10-14)
+	altCubukYaz();
+	durum.urun = v.id; try { history.replaceState(null, '', '#u-' + v.id); } catch {}
+	await gir.finished; if (S !== s) return;
+	s.onde.hidden = true; s.onde.getAnimations().forEach((a) => a.cancel()); s.arkada.getAnimations().forEach((a) => a.cancel());
+	[s.onde, s.arkada] = [s.arkada, s.onde];
+	noktalariCiz();
+	setTimeout(() => { sahne.classList.add('goster'); s.mesgul = false; }, 120);
+}
+
+// Püskürt sahnesi: yerde küçük bir ateş tutuşur → tüp titreyip ateşe püskürtür → toz kameraya gelir, ekran bir an beyaza boğulur
+// → beyaz dağılınca ateş sönmüştür, yerinden ince duman yükselir. İki tuval: sahne (ateş, jet, duman) ve tam ekran perde.
+const perde = document.createElement('canvas'); perde.className = 'perde'; perde.setAttribute('aria-hidden', 'true'); document.body.append(perde);
+const pz = perde.getContext('2d');
+const lekeYap = (renkler) => { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d');
+	const r = g.createRadialGradient(32, 32, 0, 32, 32, 32); renkler.forEach(([d, k]) => r.addColorStop(d, k)); g.fillStyle = r; g.fillRect(0, 0, 64, 64); return c; };
+// toz iki tonlu (ışık alan krem, gölgedeki gri): bulut hacimli görünür; alev üç tonlu (çekirdek sarı-beyaz, gövde turuncu, uç kırmızı)
+const ACIK = lekeYap([[0, 'rgba(250,246,234,1)'], [0.5, 'rgba(242,236,220,0.5)'], [1, 'rgba(0,0,0,0)']]);
+const GOLGE = lekeYap([[0, 'rgba(168,172,182,1)'], [0.5, 'rgba(140,146,160,0.45)'], [1, 'rgba(0,0,0,0)']]);
+const ALEV = [lekeYap([[0, 'rgba(255,248,214,1)'], [0.4, 'rgba(255,214,120,0.7)'], [1, 'rgba(255,140,40,0)']]), lekeYap([[0, 'rgba(255,170,60,1)'], [0.45, 'rgba(240,96,24,0.6)'], [1, 'rgba(200,40,10,0)']]), lekeYap([[0, 'rgba(220,60,20,0.9)'], [0.5, 'rgba(160,30,10,0.4)'], [1, 'rgba(90,10,0,0)']])];
+const aciDer = () => (sahneDar() ? 14 : 35);
+function boyutla(c, w, h) { const d = Math.min(2, devicePixelRatio || 1); if (c.width !== Math.round(w * d) || c.height !== Math.round(h * d)) { c.width = w * d; c.height = h * d; } return d; }
+function ucNoktasi(s) {
+	const r = s.sahne.getBoundingClientRect(), u = s.urun.getBoundingClientRect(), zemin = r.height * (sahneDar() ? 0.825 : 0.95), [ux, uy] = s.uc ?? [0.255, 0.875];
+	const x = u.left - r.left + u.width * ux, y = u.top - r.top + u.height * uy;
+	return { x, y, zemin, olcek: u.height / 600, atesX: x - Math.tan(aciDer() * Math.PI / 180) * (zemin - y) * 0.85, sx: r.left, sy: r.top };
+}
+function kare(s, son) {
+	const tuval = $('#duman', s.sahne), cz = tuval.getContext('2d');
+	return (t) => {
+		if (S !== s) { pz.clearRect(0, 0, perde.width, perde.height); return; }
+		const dt = Math.min(0.05, (t - son) / 1000); son = t;
+		const w = s.sahne.clientWidth, h = s.sahne.clientHeight, d = boyutla(tuval, w, h);
+		cz.setTransform(d, 0, 0, d, 0, 0); cz.clearRect(0, 0, w, h);
+		const uc = ucNoktasi(s), ates = s.ates;
+		ates.guc += (ates.hedef - ates.guc) * Math.min(1, dt * (ates.hedef > ates.guc ? 2.2 : 12));
+		// ateş: yerde parıltı + yükselen alev parçacıkları (ışık toplanarak çizilir)
+		if (ates.guc > 0.01) {
+			const g = cz.createRadialGradient(uc.atesX, uc.zemin, 0, uc.atesX, uc.zemin, 160 * uc.olcek);
+			g.addColorStop(0, `rgba(255,120,40,${0.32 * ates.guc})`); g.addColorStop(1, 'rgba(255,80,20,0)'); cz.fillStyle = g; cz.fillRect(uc.atesX - 200, uc.zemin - 200, 400, 260);
+			for (let i = 0; i < Math.round(7 * ates.guc); i++) s.alevler.push({ x: uc.atesX + (Math.random() - 0.5) * 70 * uc.olcek, y: uc.zemin - 4, vx: (Math.random() - 0.5) * 30, vy: -(110 + Math.random() * 150) * uc.olcek, r: (14 + Math.random() * 16) * uc.olcek, omur: 0, sure: 0.45 + Math.random() * 0.5 });
+		}
+		cz.globalCompositeOperation = 'lighter';
+		for (const a of s.alevler) {
+			a.omur += dt; a.x += (a.vx + Math.sin((a.omur + a.y) * 9) * 40) * dt; a.y += a.vy * dt; a.r *= 1 - dt * 1.1;
+			const k = a.omur / a.sure; if (k >= 1) continue;
+			cz.globalAlpha = (k < 0.15 ? k / 0.15 : 1 - k) * 0.85 * Math.max(0.25, ates.guc);
+			const sp = ALEV[k < 0.35 ? 0 : k < 0.7 ? 1 : 2]; cz.drawImage(sp, a.x - a.r, a.y - a.r * 1.4, a.r * 2, a.r * 2.8);
+		}
+		s.alevler = s.alevler.filter((a) => a.omur < a.sure);
+		cz.globalCompositeOperation = 'source-over';
+		// jet: ucun baktığı yöne koni içinde çıkar, yere çarpıp yayılır, kabarıp yükselir
+		if (s.jet) for (let i = 0; i < (dar() ? 11 : 16); i++) {
+			const aci = (aciDer() + (Math.random() - 0.5) * 28) * Math.PI / 180, hiz = (1000 + Math.random() * 500) * uc.olcek, ileri = Math.random() * dt;
+			s.parcalar.push({ x: uc.x - Math.sin(aci) * hiz * ileri, y: uc.y + Math.cos(aci) * hiz * ileri, vx: -Math.sin(aci) * hiz, vy: Math.cos(aci) * hiz, r: (3 + Math.random() * 4) * uc.olcek, buyu: (55 + Math.random() * 70) * uc.olcek, omur: 0, sure: 1.5 + Math.random() * 1.8, a: 0.38 + Math.random() * 0.22, golge: Math.random() < 0.3 });
+		}
+		// söndükten sonra ateşin yerinden ince gri duman
+		if (t < s.dumanBitis) for (let i = 0; i < 2; i++) s.dumanlar.push({ x: uc.atesX + (Math.random() - 0.5) * 50, y: uc.zemin - 6, vx: (Math.random() - 0.5) * 20, vy: -(40 + Math.random() * 40), r: 10 + Math.random() * 10, buyu: 40, omur: 0, sure: 2.4 + Math.random(), a: 0.16, golge: true, ince: true });
+		for (const p of [...s.parcalar, ...s.dumanlar]) {
+			p.omur += dt; const surt = Math.pow(0.08, dt); p.vx *= surt; if (!p.ince) { p.vy *= surt; p.vy -= 70 * dt * Math.min(1, p.omur * 2); }
+			p.vx += (Math.random() - 0.5) * 140 * dt; p.vy += (Math.random() - 0.5) * 90 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.buyu * dt * (1 - (p.omur / p.sure) * 0.6);
+			if (p.y > uc.zemin - p.r * 0.45) { p.y = uc.zemin - p.r * 0.45; p.vx += -Math.abs(p.vy) * (0.4 + Math.random() * 0.6) + (Math.random() - 0.5) * 180; p.vy = -Math.abs(p.vy) * 0.35; }
+			const k = p.omur / p.sure, alfa = p.a * (k < 0.08 ? k / 0.08 : Math.pow(1 - (k - 0.08) / 0.92, 1.4)); if (alfa <= 0.004) continue;
+			cz.globalAlpha = alfa * (p.golge ? 0.8 : 1); cz.drawImage(p.golge ? GOLGE : ACIK, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+		}
+		cz.globalAlpha = 1; s.parcalar = s.parcalar.filter((p) => p.omur < p.sure); s.dumanlar = s.dumanlar.filter((p) => p.omur < p.sure);
+		// tam ekran perde: kameraya gelen toz bulutu + beyaz örtü (0,35 sn'de kapanır, kısa bekler, 1,5 sn'de açılır)
+		const pw = innerWidth, ph = innerHeight, pd = boyutla(perde, pw, ph);
+		pz.setTransform(pd, 0, 0, pd, 0, 0); pz.clearRect(0, 0, pw, ph);
+		const e = s.perdeBas ? t - s.perdeBas : -1;
+		if (e >= 0 && e < 420) for (let i = 0; i < 5; i++) { const yon = Math.random() * Math.PI * 2, hiz = 300 + Math.random() * 700;
+			s.ekranToz.push({ x: uc.sx + uc.x, y: uc.sy + uc.y, vx: Math.cos(yon) * hiz, vy: Math.sin(yon) * hiz - 120, r: 30 + Math.random() * 40, buyu: 700 + Math.random() * 600, omur: 0, sure: 1.6 + Math.random() * 1.2, golge: Math.random() < 0.25 }); }
+		for (const p of s.ekranToz) { p.omur += dt; const surt = Math.pow(0.15, dt); p.vx *= surt; p.vy *= surt; p.x += p.vx * dt; p.y += p.vy * dt; p.r += p.buyu * dt; p.buyu *= Math.pow(0.3, dt);
+			const k = Math.min(1, p.omur / p.sure); pz.globalAlpha = 0.55 * Math.pow(1 - k, 1.2) * (p.golge ? 0.7 : 1); pz.drawImage(p.golge ? GOLGE : ACIK, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2); }
+		s.ekranToz = s.ekranToz.filter((p) => p.omur < p.sure);
+		if (e >= 0) { const f = e < 350 ? e / 350 : e < 750 ? 1 : e < 2300 ? 1 - (e - 750) / 1550 : 0; pz.globalAlpha = 0.93 * f * f * (3 - 2 * f); pz.fillStyle = '#f4f1e8'; pz.fillRect(0, 0, pw, ph); if (e >= 2300) s.perdeBas = 0; }
+		pz.globalAlpha = 1;
+		const devam = s.jet || s.parcalar.length || s.alevler.length || s.dumanlar.length || s.ekranToz.length || ates.guc > 0.01 || ates.hedef > 0 || s.perdeBas || t < s.dumanBitis;
+		if (devam) requestAnimationFrame(kare(s, t)); else { s.calisiyor = false; cz.clearRect(0, 0, w, h); pz.clearRect(0, 0, pw, ph); }
+	};
+}
+const bekle = (ms) => new Promise((r) => setTimeout(r, ms));
+async function puskurt() {
+	const s = S; if (!s || s.sahneMesgul || s.mesgul) return;
+	s.sahneMesgul = true; const dugme = $('#puskurt'); dugme.setAttribute('aria-pressed', 'true');
+	s.ates.hedef = 1; if (!s.calisiyor) { s.calisiyor = true; requestAnimationFrame(kare(s, performance.now())); }   // 1. ateş tutuşur
+	await bekle(azHareket ? 200 : 1300); if (S !== s) return;
+	s.jet = true;                                                                                                       // 2. tüp titrer, jet ateşe
+	s.urun.animate([{ translate: '-50% 0' }, { translate: 'calc(-50% + 1.5px) -1px' }, { translate: 'calc(-50% - 1.5px) 1px' }, { translate: '-50% 0' }], { duration: 90, iterations: 22 });
+	await bekle(650); if (S !== s) return;
+	if (!azHareket) s.urun.animate([{ scale: '1' }, { scale: '1.07' }, { scale: '1' }], { duration: 1400, easing: 'cubic-bezier(0.22, 0.8, 0.22, 1)' });   // 3. toz kameraya gelir, ekran beyaza boğulur
+	s.perdeBas = performance.now();
+	await bekle(450); if (S !== s) return;
+	s.ates.hedef = 0; s.ates.guc = 0; s.alevler = []; s.dumanBitis = performance.now() + 1800; s.jet = false;           // 4. beyazın altında ateş söner, yerinde duman kalır
+	await bekle(2000); if (S !== s) return;
+	dugme.setAttribute('aria-pressed', 'false'); s.sahneMesgul = false;
+}
+
+function sahneBagla(sahne) {
+	$('#boylar')?.addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) sec(b.dataset.yon ? S.i + Number(b.dataset.yon) : Number(b.dataset.i)); });
+	$('#puskurt').addEventListener('click', puskurt);
+	sahne.addEventListener('click', (e) => { const n = e.target.closest('.nokta'); $$('.nokta', sahne).forEach((x) => x.classList.toggle('acik', x === n && !x.classList.contains('acik'))); });
+	// telefonda sahneyi yana kaydırmak boyu değiştirir
+	let bx = null, by = 0;
+	sahne.addEventListener('pointerdown', (e) => { if (e.pointerType === 'mouse' || e.target.closest('.boylar, a, button')) return; bx = e.clientX; by = e.clientY; });
+	sahne.addEventListener('pointerup', (e) => { if (bx == null) return; const dx = e.clientX - bx, dy = e.clientY - by; bx = null; if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy) * 1.4) sec(S.i + (dx < 0 ? 1 : -1)); });
+	sahne.addEventListener('pointercancel', () => (bx = null));
+	// fare ürünü hafifçe döndürür, dev yazılar ters yönde az kayar (dokunmatikte yok)
+	if (matchMedia('(hover: hover)').matches && !azHareket) {
+		const dondur = $('#dondur'), devler = $$('.dev', sahne);
+		sahne.addEventListener('pointermove', (e) => { const r = sahne.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+			dondur.style.transform = `rotateY(${x * 14}deg) rotateX(${-y * 6}deg) translateX(${x * 10}px)`; devler.forEach((d) => (d.style.translate = `${-x * 18}px ${-y * 8}px`)); });
+		sahne.addEventListener('pointerleave', () => { dondur.style.transform = ''; devler.forEach((d) => (d.style.translate = '')); });
+	}
+	altGozcu?.disconnect(); altGozcu = new IntersectionObserver(([g]) => $('#altCubuk').classList.toggle('acik', !g.isIntersecting && durum.urun != null), { rootMargin: '-40px 0px 0px 0px' });
+	altGozcu.observe($('#al'));
+}
+let altGozcu = null;
+
+// ───────────────────────── Sepet ─────────────────────────
+// Ödeme yok: sepet bir sipariş listesidir, satan firmaya WhatsApp mesajı olarak gider. Liste yalnız bu tarayıcıda tutulur.
+let sepet = {};
+try { sepet = JSON.parse(localStorage.getItem('kaptan-sepet')) || {}; } catch {}
+Object.keys(sepet).forEach((id) => { if (!URUN.has(Number(id)) || !(sepet[id] > 0)) delete sepet[id]; });
+const sepetSakla = () => { try { localStorage.setItem('kaptan-sepet', JSON.stringify(sepet)); } catch {} };
+const sepetSatirlari = () => Object.entries(sepet).map(([id, adet]) => ({ u: URUN.get(Number(id)), adet }));
+function sepetCiz() {
+	const l = sepetSatirlari(), adet = l.reduce((t, x) => t + x.adet, 0), sayi = $('#sepetSayi');
+	sayi.hidden = !adet; sayi.textContent = adet; $('#sepetDugme').setAttribute('aria-label', adet ? `Sepet, ${adet} ürün` : 'Sepet');
+	$('#sepetOzet').textContent = adet ? `${adet} ürün` : '';
+	if (!adet) { $('#sepetListe').innerHTML = '<p class="sepet-bos">Sepetiniz boş. Bir ürünün sayfasındaki fiyat düğmesine dokunarak ekleyebilirsiniz.</p>'; $('#sepetAlt').innerHTML = ''; return; }
+	const firmalar = [...new Set(l.map((x) => x.u.kurum))], cok = firmalar.length > 1;
+	$('#sepetListe').innerHTML = firmalar.map((f) => (cok ? `<p class="sepet-firma">${kacir(KURUM[f].ad)}</p>` : '') + l.filter((x) => x.u.kurum === f).map(({ u, adet }) => `<div class="satir-s">
+		${!u.gorsel ? `<div class="tabak ikon">${ik(ikonu(u))}</div>` : `<div class="tabak ${tupMu(u) ? 'koyu' : 'acik'}"><img src="${kacir(src(u))}" alt=""></div>`}
+		<div><h3>${kacir(u.ad)}</h3><span>${u.fiyat != null ? TL(u.fiyat * adet) : 'Fiyat sorulacak'}</span></div>
+		<div class="adet"><button type="button" data-adet="-1" data-id="${u.id}" aria-label="Azalt">${ik('eksi')}</button><b>${adet}</b><button type="button" data-adet="1" data-id="${u.id}" aria-label="Artır">${ik('arti')}</button></div>
+	</div>`).join('')).join('');
+	const toplam = l.reduce((t, x) => t + (x.u.fiyat ?? 0) * x.adet, 0);
+	$('#sepetAlt').innerHTML = `<div class="sepet-toplam"><span>Toplam · KDV dahil</span><b>${TL(toplam)}</b></div>`
+		+ firmalar.map((f) => `<a class="sepet-gonder" href="${sepetWa(f, l.filter((x) => x.u.kurum === f))}" target="_blank" rel="noopener">${ik('wa')}${cok ? kacir(KURUM[f].ad) + '’a gönder' : 'WhatsApp’tan sipariş ver'}</a>`).join('')
+		+ `<p class="sepet-not">Sipariş listeniz WhatsApp mesajı olarak hazırlanır; ödeme ve teslimat firmayla konuşulur.${cok ? ' Ürünler iki ayrı firmadan olduğu için iki ayrı mesaj gider.' : ''}</p>`;
+}
+function sepetWa(f, l) {
+	const t = l.reduce((x, y) => x + (y.u.fiyat ?? 0) * y.adet, 0);
+	const m = 'Merhaba, kataloğunuzdan sipariş vermek istiyorum:\n' + l.map(({ u, adet }) => `• ${adet} × ${u.ad}${u.fiyat != null ? ' — ' + TL(u.fiyat * adet) : ''}`).join('\n') + `\nToplam: ${TL(t)} (KDV dahil)`;
+	return `https://wa.me/9${KURUM[f].telefon.replace(/\D/g, '')}?text=${encodeURIComponent(m)}`;
+}
+function sepetAc(ac) { $('#sepet').classList.toggle('acik', ac); $('#sepetPerde').classList.toggle('acik', ac); $('#sepet').setAttribute('aria-hidden', String(!ac)); }
+function sepeteEkle(id, dugme) {
+	sepet[id] = (sepet[id] || 0) + 1; sepetSakla(); sepetCiz();
+	const hedef = $('#sepetDugme'), zipla = () => hedef.animate([{ scale: '1' }, { scale: '1.25' }, { scale: '1' }], { duration: 420, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+	// düğme kısa süre onay gösterir
+	const i = dugme && $('.ti', dugme); if (i) { const eski = i.innerHTML; i.innerHTML = IK.tamam; setTimeout(() => (i.innerHTML = eski), 1100); }
+	// ürünün görseli sepete uçar (görsel ekrandaysa)
+	const g = S && $('img, .ti', S.onde), r = g?.getBoundingClientRect();
+	if (!g || azHareket || r.bottom < 60 || r.top > innerHeight) return zipla();
+	const h = hedef.getBoundingClientRect(), k = g.cloneNode(true);
+	Object.assign(k.style, { position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px', margin: 0, zIndex: 60, pointerEvents: 'none', objectFit: 'contain', viewTransitionName: 'none', filter: 'none' });
+	document.body.append(k);
+	const dx = h.left + h.width / 2 - (r.left + r.width / 2), dy = h.top + h.height / 2 - (r.top + r.height / 2);
+	k.animate([{ transform: 'none', opacity: 1 }, { transform: `translate(${dx * 0.55}px, ${dy * 0.35}px) scale(0.5) rotate(8deg)`, opacity: 1, offset: 0.45 }, { transform: `translate(${dx}px, ${dy}px) scale(0.05) rotate(16deg)`, opacity: 0.3 }], { duration: 760, easing: 'cubic-bezier(0.5, 0, 0.2, 1)' })
+		.finished.finally(() => { k.remove(); zipla(); });
+}
+$('#sepetDugme').addEventListener('click', () => sepetAc(true));
+$('#sepetKapat').addEventListener('click', () => sepetAc(false));
+$('#sepetPerde').addEventListener('click', () => sepetAc(false));
+addEventListener('keydown', (e) => { if (e.key === 'Escape') sepetAc(false); });
+$('#sepetListe').addEventListener('click', (e) => { const b = e.target.closest('[data-adet]'); if (!b) return; const id = b.dataset.id; sepet[id] = (sepet[id] || 0) + Number(b.dataset.adet); if (sepet[id] <= 0) delete sepet[id]; sepetSakla(); sepetCiz(); });
+$('#acEkle').addEventListener('click', () => { if (S) open(fiyatWa(S.m.vars[S.i].u), '_blank', 'noopener'); });
+sepetCiz();
+
+// ───────────────────────── Yönlendirme ─────────────────────────
+function hedefOku() { const h = location.hash.slice(1), m = h.match(/^u-(\d+)$/); if (m && URUN.has(Number(m[1]))) return { urun: Number(m[1]) }; return { bolum: BOLUM.some((b) => b.kod === h) ? h : null }; }
+function goster(hedef, kaynakImg) {
+	const urunAc = hedef.urun != null, onceUrun = durum.urun;
+	const degis = () => {
+		$$('[style*="view-transition-name"]').forEach((e) => (e.style.viewTransitionName = ''));
+		$('#liste').hidden = urunAc; $('#urunSayfa').hidden = !urunAc; $('#geri').hidden = !urunAc; $('#altCubuk').classList.remove('acik');
+		if (urunAc) {
+			if (onceUrun == null) durum.kaydirma = scrollY;
+			durum.urun = hedef.urun; urunCiz(hedef.urun, vtVar && !!kaynakImg); markaYaz(URUN.get(hedef.urun).bolum); scrollTo(0, 0);
+			const img = $('#katA img'); if (img && kaynakImg) img.style.viewTransitionName = 'urun-gorsel';
+		} else {
+			S = null; durum.urun = null; $('#urunSayfa').innerHTML = '';
+			if (hedef.bolum && hedef.bolum !== durum.bolum) { durum.bolum = hedef.bolum; durum.alt = ''; }
+			if (onceUrun != null && !hedef.bolum) { const u = URUN.get(onceUrun); if (u.bolum !== durum.bolum) { durum.bolum = u.bolum; durum.alt = ''; } }
+			sekmeCiz(); baslikYaz(durum.arama.trim() ? ['Arama'] : BOLUM.find((b) => b.kod === durum.bolum).baslik, false); listeCiz(onceUrun == null);
+			scrollTo(0, onceUrun != null ? durum.kaydirma : 0);
+			const a = onceUrun != null && AILE_ID.get(onceUrun), d = onceUrun != null && ($(`#izgara [data-g="${onceUrun}"]`) ?? (a && $$('#izgara .aile img').find((i) => a.boylar.some((b) => String(b.id) === i.dataset.g))));
+			if (d) d.style.viewTransitionName = 'urun-gorsel';
+		}
+	};
+	const vtVar = !!document.startViewTransition && !azHareket;
+	if (vtVar && (urunAc ? kaynakImg : onceUrun != null)) {
+		if (kaynakImg) kaynakImg.style.viewTransitionName = 'urun-gorsel'; else { const i = $('#katA img, #katB:not([hidden]) img'); if (S?.onde) { const o = $('img', S.onde); if (o) o.style.viewTransitionName = 'urun-gorsel'; } }
+		try { document.startViewTransition(degis).finished.finally(() => $$('[style*="view-transition-name"]').forEach((e) => (e.style.viewTransitionName = ''))); return; } catch {}
+	}
+	degis();
+}
+function git(hash, kaynakImg) { const ayni = location.hash === '#' + hash; try { history.pushState(null, '', '#' + hash); } catch { try { location.hash = hash; } catch {} } goster(hedefOku().urun != null || !ayni ? hedefOku() : hedefOku(), kaynakImg); }
+document.addEventListener('click', (e) => {
+	const a = e.target.closest('[data-git]'); if (!a || e.metaKey || e.ctrlKey) return;
+	e.preventDefault();
+	const h = a.dataset.git, kart = a.closest('.kart, .aile');
+	// karttaki görsel sahneye uçar; raf kartında başka bir boya basıldıysa görsel yine o karttan çıkar
+	git(h, h.startsWith('u-') ? kart && $('img[data-g]', kart) : null);
+});
+// imleç → --px, --py (-1…1): kart eğilir, pencere katmanları kayar
+$('#izgara').addEventListener('pointermove', (e) => {
+	if (e.pointerType !== 'mouse') return;
+	const k = e.target.closest('.aile, .kart'); if (!k) return;
+	const p = $('.pencere', k) ?? k, r = p.getBoundingClientRect();
+	k.style.setProperty('--px', Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1)).toFixed(3));
+	k.style.setProperty('--py', Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height) * 2 - 1)).toFixed(3));
+	k.classList.add('ic');
+});
+$('#izgara').addEventListener('pointerout', (e) => { const k = e.target.closest('.aile, .kart'); if (k && !k.contains(e.relatedTarget)) { k.classList.remove('ic'); k.style.setProperty('--px', 0); k.style.setProperty('--py', 0); } });
+$('#geri').addEventListener('click', () => git(URUN.get(durum.urun)?.bolum ?? durum.bolum));
+addEventListener('popstate', () => { const h = hedefOku(); if ((h.urun ?? null) !== durum.urun || (h.bolum && h.bolum !== durum.bolum)) goster(h, null); });
+addEventListener('hashchange', () => { const h = hedefOku(); if ((h.urun ?? null) !== durum.urun) goster(h, null); });
+addEventListener('resize', () => { listeSigdir(); sahneOlc(); gostergeKoy(); });
+document.fonts?.ready.then(() => { listeSigdir(); sahneOlc(); gostergeKoy(); olcuSigdir(); });
+
+iletisimCiz();
+belirle($$('#iletisim > *'), 'alt');
+{ const h = hedefOku(); if (h.bolum) durum.bolum = h.bolum; goster(h, null); }
+</script>
