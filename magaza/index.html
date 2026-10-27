@@ -2,7 +2,17 @@
 <html lang="tr">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kaptan Katalog</title>
+<title>Yangın Tüpü ve Terazi Modelleri | Kaptan Yangın</title>
+<meta name="description" content="KKT, CO₂, köpüklü söndürücüler ile terazi ve kantar modelleri. Fiyatı WhatsApp'tan sorun: 0533 407 75 57">
+<link rel="canonical" href="https://7kaptan.com/magaza/">
+<link rel="icon" type="image/png" href="kaptan-logo.png">
+<link rel="apple-touch-icon" href="kaptan-logo.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Kaptan Yangın">
+<meta property="og:title" content="Yangın Tüpü ve Terazi Modelleri | Kaptan Yangın">
+<meta property="og:url" content="https://7kaptan.com/magaza/">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:image" content="https://7kaptan.com/magaza/kaptan-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@200;300;400;500&family=Geist:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="katalog-tema.css">
@@ -625,7 +635,7 @@ const zeminKart = (u) => u.bolum === 'kantar'
 	: tupMu(u) ? ['T4-otel-yatay-bos', '50% 45%'] : (/dedekt/i.test(u.ad) ? ['I05-dedektor', '60% 20%'] : /dolab/i.test(u.ad) ? ['I08-dolap', '80% 50%'] : /kapı/i.test(u.ad) ? ['I09-kapi', '70% 45%'] : ['I07-panel', '80% 50%']);
 const pencereHtml = ([g, odak], yazi) => `<span class="pencere" aria-hidden="true"><img class="zemin" src="../gorsel/${g}.jpg" style="object-position:${odak}" alt="" loading="lazy"><span class="yazi">${kacir(yazi)}</span></span>`;
 function kartHtml(u) {
-	const tabak = !u.gorsel ? `<div class="tabak ikon">${ik(ikonu(u))}</div>` : `<div class="tabak derin ${tupMu(u) ? 'koyu' : 'acik'}">${pencereHtml(zeminKart(u), kapasite(u) ?? '')}${tupcuk(u, `<img src="${kacir(src(u))}" alt="" loading="lazy" data-g="${u.id}">`)}</div>`;
+	const tabak = !u.gorsel ? `<div class="tabak ikon">${ik(ikonu(u))}</div>` : `<div class="tabak derin ${tupMu(u) ? 'koyu' : 'acik'}">${pencereHtml(zeminKart(u), kapasite(u) ?? '')}${tupcuk(u, `<img src="${kacir(src(u))}" alt="${kacir(u.ad)}" loading="lazy" data-g="${u.id}">`)}</div>`;
 	return `<a class="kart" href="#u-${u.id}" data-git="u-${u.id}">${tabak}<h3>${kacir(u.ad)}</h3><span class="kunye">${kacir(kunye(u))}</span><span class="fiyat fiyat-al">Fiyat al →</span></a>`;
 }
 const enKucuk = (l) => { const f = l.filter((x) => x != null); return f.length ? Math.min(...f) : null; };
@@ -633,7 +643,7 @@ function aileHtml(a) {
 	const on = a.boylar.find((b) => Number(b.u.kapasite) === 6) ?? a.boylar[0], enAz = enKucuk(a.boylar.map((b) => b.u.fiyat)), enAzDolum = enKucuk(a.boylar.map((b) => b.u.dolum));
 	return `<article class="aile">
 		<a class="ana" href="#u-${on.id}" data-git="u-${on.id}" aria-label="${kacir(a.ad)}"></a>
-		<div class="resim">${pencereHtml(ZEMIN_AILE[a.kod] ?? ZEMIN_AILE.kkt, YAZI_AILE[a.kod] ?? '')}${tupcuk(on.u, `<img src="${kacir(src(on.u))}" alt="" loading="lazy" data-g="${on.id}">`)}</div>
+		<div class="resim">${pencereHtml(ZEMIN_AILE[a.kod] ?? ZEMIN_AILE.kkt, YAZI_AILE[a.kod] ?? '')}${tupcuk(on.u, `<img src="${kacir(src(on.u))}" alt="${kacir(on.u.ad)}" loading="lazy" data-g="${on.id}">`)}</div>
 		<div class="govde">
 			<h3>${kacir(a.ad)}</h3>
 			<div class="siniflar">${a.sinif ? a.sinif.split(' ').map((s) => `<b>${s}</b>`).join('') : ''}<span>${kacir(a.sinif ? a.sinifNot ?? 'sınıfı' : a.madde)}</span></div>
