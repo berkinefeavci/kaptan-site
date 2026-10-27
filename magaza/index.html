@@ -739,10 +739,11 @@ function olculer(m, v) {
 }
 const olcuHtml = (l) => l.slice(0, 4).map(([b, s]) => `<div class="olcu"><b>${kacir(b)}</b><span>${kacir(s)}</span></div>`).join('');
 function teknik(m, v) {
-	const u = v.u, a = m.a, bos = 'Üretici föyünden eklenecek';
+	const u = v.u, a = m.a;
 	const s = a?.madde ? [['Söndürücü madde', `${a.madde}, ${kg(u.kapasite)}`], ['Yangın sınıfı', a.sinif ? a.sinif.split(' ').join(', ') + (a.sinifNot ? ' ' + a.sinifNot : '') : null], ['Söndürme gücü', null], ['Boşalma süresi', null], ['Çalışma sıcaklığı', null], ['Dolu ağırlık · boy', null]]
 		: [['Tür', u.alt_tur ?? u.ad], ['Marka', u.marka], ['Model', u.model], ['Kapasite', kapasite(u)], ['Satış birimi', u.birim === 'kg' ? 'adet' : u.birim]].filter(([, d]) => d);
-	return s.map(([k, d]) => `<tr><td>${kacir(k)}</td>${d ? `<td>${kacir(d)}</td>` : `<td class="bos">${bos}</td>`}</tr>`).join('');
+	// Değeri olmayan satır gösterilmez (föy bilgisi gelince dolar).
+	return s.filter(([, d]) => d).map(([k, d]) => `<tr><td>${kacir(k)}</td><td>${kacir(d)}</td></tr>`).join('');
 }
 function olcuSigdir() { $$('#bilgi .olcu b').forEach((b) => { b.style.fontSize = ''; let f = parseFloat(getComputedStyle(b).fontSize); while (b.scrollWidth > b.clientWidth + 1 && f > 20) { f -= 2; b.style.fontSize = f + 'px'; } }); }
 function benzerler(m, v) {
