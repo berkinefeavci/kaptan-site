@@ -504,6 +504,25 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .hizmet ul { list-style: none; margin-top: 14px; display: grid; gap: 8px; font-size: 15px; color: var(--ink-2); }
 .hizmet li { padding-left: 16px; position: relative; }
 .hizmet li::before { content: ""; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--vurgu-cizgi, var(--vurgu)); }
+/* Hizmet ve kategori sayfaları (Araclar/seo-sayfalar.py): okunur metin sütunu ve ürün kartları */
+.yazi-sutun { max-width: 760px; }
+.yazi-sutun .baslik { font-size: clamp(30px, 3.4vw, 52px); }
+.yazi-sutun > .baslik:not(:first-child) { margin-top: clamp(64px, 8vw, 104px); }
+.yazi-sutun p, .yazi-sutun ul, .yazi-sutun ol { margin-top: 18px; font-size: 17px; line-height: 1.6; color: var(--ink-2); }
+.yazi-sutun .baslik + p, .yazi-sutun .baslik + ul, .yazi-sutun .baslik + ol { margin-top: 26px; }
+.yazi-sutun ol { padding-left: 22px; display: grid; gap: 10px; }
+.yazi-sutun ol li::marker { font: 500 13px var(--mono); color: var(--vurgu-cizgi, var(--vurgu)); }
+.yazi-sutun h3 { margin-top: 34px; font-weight: 500; font-size: 21px; letter-spacing: -.02em; color: var(--ink); }
+.yazi-sutun h3 + p { margin-top: 8px; }
+.yazi-sutun ul { list-style: none; display: grid; gap: 10px; }
+.yazi-sutun li { padding-left: 18px; position: relative; }
+.yazi-sutun li::before { content: ""; position: absolute; left: 0; top: .78em; width: 8px; height: 2px; background: var(--vurgu-cizgi, var(--vurgu)); }
+.yazi-sutun b { color: var(--ink); font-weight: 500; }
+.yazi-sutun a { overflow-wrap: anywhere; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--vurgu-cizgi, var(--vurgu)); }
+.urun-izgara { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.urun-kart { display: block; transition: border-color .2s; }
+.urun-kart:hover { border-color: var(--vurgu-cizgi, var(--vurgu)); }
+.urun-kart h3 { margin-top: 0; font-size: 18px; line-height: 1.3; }
 .adim-izi { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: clamp(40px, 5vw, 64px); border-top: 1px solid var(--cizgi); }
 .adim-izi div { padding: 26px 24px 0 0; }
 .adim-izi b { font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--vurgu-cizgi, var(--vurgu)); }

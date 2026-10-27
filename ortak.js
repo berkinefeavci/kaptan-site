@@ -25,9 +25,9 @@
   <div class="kapak"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
   <div class="ic">
     <div><a class="logo" href="index.html"><i></i>KAPTAN</a><p style="margin-top:18px;max-width:280px">İstanbul ve Antalya'da yangın güvenliği, kantar ve terazi.</p></div>
-    <div><h5>Kurumsal</h5><a href="hakkimizda.html">Hakkımızda</a><a href="${ana("tup")}">Yangın</a><a href="${ana("kantar")}">Kantar</a><a href="hakkimizda.html#kurumlar">Referanslar</a></div>
-    <div><h5>Ürünler</h5><a href="magaza/index.html#ysc">Söndürücüler</a><a href="magaza/index.html#yangin">Yangın güvenliği</a><a href="magaza/index.html#kantar">Tartı sistemleri</a></div>
-    <div><h5>İletişim</h5><p>Kaptan Yangın · ${KY.telefon}</p><p>Merkez: Samatya, Fatih / İstanbul</p><p>Şube: Finike / Antalya</p></div>
+    <div><h5>Hizmetler</h5><a href="yangin-tupu-dolum">Yangın tüpü dolumu</a><a href="yangin-sondurucu-bakim">Periyodik kontrol ve bakım</a><a href="hakkimizda.html">Hakkımızda</a><a href="hakkimizda.html#kurumlar">Referanslar</a></div>
+    <div><h5>Ürünler</h5><a href="yangin-sondurucu">Yangın söndürücüler</a><a href="terazi-kantar">Terazi ve kantar</a><a href="magaza/index.html">Tüm katalog</a></div>
+    <div><h5>İletişim</h5><p>Kaptan Yangın · ${KY.telefon}</p><a href="istanbul-fatih">Merkez: Samatya, Fatih / İstanbul</a><a href="antalya-finike">Şube: Finike / Antalya</a></div>
     <p class="kucuk">© 2026 Kaptan Yangın</p>
   </div>
 </footer>
