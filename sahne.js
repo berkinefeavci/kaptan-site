@@ -17,7 +17,7 @@ const YANGIN = [
   { img: "yangin/k5", sag: true, x: .32, y: .472, ray: "Yangın kapısı", h: "Yangın kapısı", p: "Yangını ve dumanı bulunduğu bölümde tutar, kaçış yolunu açık bırakır. Panik bar, kapı kapatıcı ve yalıtım fitiliyle.", c: ["Yangına dayanıklı", "Panik bar", "Montaj + bakım"] },
   { img: "yangin/k6", x: .67, y: .455, ray: "Tahliye planı", h: "Tahliye planı", p: "Çıkışlar, toplanma alanı ve yangın ekipmanları tek bakışta. Binanıza özel çizilir, doğru noktalara asılır.", c: ["Kat planı", "Kaçış yolu", "Montaj"] },
   { img: "yangin/k7", sag: true, x: .33, y: .472, ray: "Yangın dolabı", h: "Yangın dolabı", p: "Hortum, lans ve vana; doğru yerde, doğru basınçta, her an kullanıma hazır.", c: ["Hortum", "Lans", "Test"] },
-  { img: "yangin/k8", x: .59, y: .556, ray: "Tüp", h: "Ve elinin altındaki tüp.", p: "İlk müdahale çoğu zaman en yakındaki söndürücüyle yapılır. Her kuruma doğru tip, doğru kapasite.", c: ["KKT", "CO₂", "Köpüklü"], bag: ["magaza/index.html#ysc", "Söndürücüleri gör"] },
+  { img: "yangin/k8", x: .59, y: .556, ray: "Tüp", h: "Ve elinin altındaki tüp.", p: "İlk müdahale çoğu zaman en yakındaki söndürücüyle yapılır. Her kuruma doğru tip, doğru kapasite.", c: ["KKT", "CO₂", "Köpüklü"], bag: ["magaza/#ysc", "Söndürücüleri gör"] },
 ];
 // Kurumlar: x = tüpün masaüstünde duracağı yatay konum (ekran genişliğine oran)
 const MEKAN = [
@@ -79,7 +79,7 @@ function yanginYerlestir() {
   });
 }
 $("#yangin-metin").innerHTML = YANGIN.map((y, i) => `<div class="adim ${i ? "" : "acik"} ${y.sag ? "sag" : ""}"><p class="etiket">${y.e || `02 · Yangın — 0${i + 1}/0${YANGIN.length}`}</p><h2 class="baslik bol">${y.h}</h2><p class="giris">${y.p}</p>${cip(y.c)}
-  <a class="dugme koyu-d" href="${y.bag ? y.bag[0] : "magaza/index.html#yangin"}">${y.bag ? y.bag[1] : "Ürünleri gör"}</a></div>`).join("");
+  <a class="dugme koyu-d" href="${y.bag ? y.bag[0] : "magaza/#yangin"}">${y.bag ? y.bag[1] : "Ürünleri gör"}</a></div>`).join("");
 // cam kart: imlece doğru en çok 6° eğilir, imlecin olduğu yerden ışık yayılır (yalnız fare)
 document.querySelectorAll("#yangin-metin .adim").forEach((k) => {
   k.addEventListener("pointermove", (e) => {
@@ -94,11 +94,11 @@ document.querySelectorAll("#yangin-metin .adim").forEach((k) => {
 $("#ray").innerHTML = YANGIN.map((y) => `<span>${y.ray}<i></i></span>`).join("");
 
 $("#mekanlar").innerHTML = MEKAN.map((m) => `<div class="katman">${mekanResmi(m)}</div>`).join("");
-$("#mekan-metin").innerHTML = MEKAN.map((m, i) => `<div class="adim ${i ? "" : "acik"}"><h2 class="baslik bol">${m.h}</h2><p class="giris">${m.p}</p><a class="katalog-bag" href="magaza/index.html#ysc" style="margin-top:22px">Söndürücüleri gör →</a></div>`).join("");
+$("#mekan-metin").innerHTML = MEKAN.map((m, i) => `<div class="adim ${i ? "" : "acik"}"><h2 class="baslik bol">${m.h}</h2><p class="giris">${m.p}</p><a class="katalog-bag" href="magaza/#ysc" style="margin-top:22px">Söndürücüleri gör →</a></div>`).join("");
 $("#mekan-liste").innerHTML = MEKAN.map((m, i) => `<span class="${i ? "" : "on"}">${m.ad}</span>`).join("");
 
 $("#kantar-katlar").innerHTML = KANTAR.map((k) => `<img class="kat" src="gorsel/${k.img}.webp" style="--odak:${k.odak}" alt="" loading="lazy">`).join("");
-$("#kantar-metin").innerHTML = KANTAR.map((k, i) => `<div class="adim ${i ? "" : "acik"}"><p class="etiket">${k.e}</p><h2 class="baslik bol">${k.h}</h2><p class="giris">${k.p}</p>${cip(k.c)}${i === 0 ? '<a class="dugme koyu-d" href="magaza/index.html#kantar">Tartı ürünleri</a>' : ""}</div>`).join("");
+$("#kantar-metin").innerHTML = KANTAR.map((k, i) => `<div class="adim ${i ? "" : "acik"}"><p class="etiket">${k.e}</p><h2 class="baslik bol">${k.h}</h2><p class="giris">${k.p}</p>${cip(k.c)}${i === 0 ? '<a class="dugme koyu-d" href="magaza/#kantar">Tartı ürünleri</a>' : ""}</div>`).join("");
 $("#kantar-liste").innerHTML = KANTAR.map((k, i) => `<span class="${i ? "" : "on"}">${k.ad}</span>`).join("");
 
 document.querySelectorAll(".sahne .bol").forEach((h) => window.kelimeKelime(h)); // sahne dışındaki başlıkları ortak.js açar

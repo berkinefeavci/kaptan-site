@@ -3,12 +3,12 @@
 (() => {
   const SAYFA = document.body.dataset.sayfa || "ana";
   const ANA = SAYFA === "ana";
-  const ana = (id) => (ANA ? `#${id}` : `index.html#${id}`);
+  const ana = (id) => (ANA ? `#${id}` : `./#${id}`);
   const KY = window.KATALOG.kurumlar.find((k) => k.kisa_ad === "KY");
-  const MENU = [["hakkimizda.html", "Hakkımızda", "hakkimizda"], [ana("tup"), "Yangın"], [ana("kantar"), "Kantar"], ["magaza/index.html", "Ürünler", "urunler"], ["#iletisim", "İletişim"]];
+  const MENU = [["hakkimizda", "Hakkımızda", "hakkimizda"], [ana("tup"), "Yangın"], [ana("kantar"), "Kantar"], ["magaza/", "Ürünler", "urunler"], ["#iletisim", "İletişim"]];
 
   document.body.insertAdjacentHTML("afterbegin", `<header class="ust" id="ust">
-  <a class="logo" href="${ANA ? "#acilis" : "index.html"}"><i></i>KAPTAN</a>
+  <a class="logo" href="${ANA ? "#acilis" : "./"}"><i></i>KAPTAN</a>
   <nav class="menu" id="menu">${MENU.map(([href, ad, s]) => `<a href="${href}" class="${s === SAYFA ? "on sayfa" : ""}">${ad}</a>`).join("")}</nav>
   <div class="sag"><a class="dugme kirmizi" href="#iletisim">Teklif al</a><button class="sepet-ust" id="sepet-dugme" aria-label="Sepet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.3 8h11.4a1 1 0 0 1 1 1.1l-1 9.8a2 2 0 0 1-2 1.8H8.3a2 2 0 0 1-2-1.8l-1-9.8a1 1 0 0 1 1-1.1z"/><path d="M9 11V6a3 3 0 0 1 6 0v5"/></svg><b id="sepet-sayi">0</b></button><button class="burger" id="burger" aria-label="Menü"><span></span></button></div>
 </header>`);
@@ -21,16 +21,17 @@
     <div class="cagri-sag"><div class="iletisim-bilgi"><span><em>Telefon</em>${KY.telefon}</span><span><em>E-posta</em>${KY.eposta}</span><span><em>Adres</em>Samatya, Fatih / İstanbul</span></div>
       <div class="hizli" style="display:flex"><a class="dugme beyaz" href="tel:+9${KY.telefon.replace(/\D/g, "")}">Ara</a><a class="dugme kirmizi" data-wa="Merhaba, teklif almak istiyorum." href="#">WhatsApp'tan yaz</a></div></div></div></section>`);
 
-  main.insertAdjacentHTML("afterend", `<footer class="alt">
+  // Alt bilgi HTML'de duruyorsa (Araclar/seo-sayfalar.py yazar; JS'siz tarayıcılar da bağlantıları görsün) yeniden eklenmez
+  main.insertAdjacentHTML("afterend", `${document.querySelector("footer.alt") ? "" : `<footer class="alt">
   <div class="kapak"><span class="duz"></span><span class="egri"></span><span class="orta"></span><span class="egri ters"></span><span class="duz"></span></div>
   <div class="ic">
-    <div><a class="logo" href="index.html"><i></i>KAPTAN</a><p style="margin-top:18px;max-width:280px">İstanbul ve Antalya'da yangın güvenliği, kantar ve terazi.</p></div>
-    <div><h5>Hizmetler</h5><a href="yangin-tupu-dolum">Yangın tüpü dolumu</a><a href="yangin-sondurucu-bakim">Periyodik kontrol ve bakım</a><a href="hakkimizda.html">Hakkımızda</a><a href="hakkimizda.html#kurumlar">Referanslar</a></div>
-    <div><h5>Ürünler</h5><a href="yangin-sondurucu">Yangın söndürücüler</a><a href="terazi-kantar">Terazi ve kantar</a><a href="magaza/index.html">Tüm katalog</a></div>
+    <div><a class="logo" href="./"><i></i>KAPTAN</a><p style="margin-top:18px;max-width:280px">İstanbul ve Antalya'da yangın güvenliği, kantar ve terazi.</p></div>
+    <div><h5>Hizmetler</h5><a href="yangin-tupu-dolum">Yangın tüpü dolumu</a><a href="yangin-sondurucu-bakim">Periyodik kontrol ve bakım</a><a href="hakkimizda">Hakkımızda</a><a href="hakkimizda#kurumlar">Referanslar</a></div>
+    <div><h5>Ürünler</h5><a href="yangin-sondurucu">Yangın söndürücüler</a><a href="terazi-kantar">Terazi ve kantar</a><a href="magaza/">Tüm katalog</a></div>
     <div><h5>İletişim</h5><p>Kaptan Yangın · ${KY.telefon}</p><a href="istanbul-fatih">Merkez: Samatya, Fatih / İstanbul</a><a href="antalya-finike">Şube: Finike / Antalya</a></div>
     <p class="kucuk">© 2026 Kaptan Yangın</p>
   </div>
-</footer>
+</footer>`}
 <div class="cekmece" id="sepet"><div class="golge" data-kapat></div>
   <aside><header><div><h3 class="ara-baslik" style="font-size:26px">Sepet</h3><small id="sepet-ozet"></small></div><button class="kapat" data-kapat aria-label="Kapat">×</button></header>
     <div class="sepet-ic" id="sepet-ic"></div>

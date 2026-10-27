@@ -133,7 +133,7 @@
   function vitrinCiz() {
     const c = $("#cesitler");
     // çeşitler: Biz kimiz'deki sektör panoları gibi; üstüne gelinen genişler
-    if (c) c.innerHTML = CESIT.map((x, i) => `<a class="hp" href="magaza/index.html#${x.k}" style="--odak:${x.odak}" data-unsur="${x.k === "kantar" ? "kantar" : "yangin"}"><img src="${x.img}" alt="" loading="lazy">
+    if (c) c.innerHTML = CESIT.map((x, i) => `<a class="hp" href="magaza/#${x.k}" style="--odak:${x.odak}" data-unsur="${x.k === "kantar" ? "kantar" : "yangin"}"><img src="${x.img}" alt="" loading="lazy">
       <div class="hp-ust"><span class="hp-no">0${i + 1}</span><span class="hp-tur">${K.bolumler.find((b) => b.kategori === x.k).urunler.length} ürün</span></div>
       <div class="hp-alt"><h3>${x.ad}</h3><div class="hp-acik"><div><p>${x.ac}</p><div class="hp-cip">${x.c.map((t) => `<span>${t}</span>`).join("")}</div></div></div></div>
       <span class="hp-ok" aria-hidden="true">↗</span></a>`).join("");
@@ -169,7 +169,7 @@
       <dl class="kunye"><dt>Satan</dt><dd>${kacir(KURUM[u.kurum].ad)}</dd>${u.kapasite ? `<dt>Kapasite</dt><dd>${boy(u)} ${kacir(u.birim)}</dd>` : ""}${u.marka ? `<dt>Marka</dt><dd>${kacir(u.marka)}${u.model ? " " + kacir(u.model) : ""}</dd>` : ""}${a ? `<dt>Sınıf</dt><dd>${a.sinif.join(" · ") || a.ek}</dd>` : ""}</dl>
       ${a ? `<p class="giris" style="font-size:16px">${a.ac}</p>` : ""}
       <div class="fiyat-satir">${fiyatAl(u)}</div>
-      <a class="katalog-bag" href="magaza/index.html#u-${u.id}" style="justify-self:start">Tam katalogda aç ↗</a>`;
+      <a class="katalog-bag" href="magaza/#u-${u.id}" style="justify-self:start">Tam katalogda aç ↗</a>`;
     $("#detay").classList.add("acik");
   }
 
