@@ -32,7 +32,7 @@
   const foto = (u, ek = "") => {
     if (u.gorsel) return `<div class="foto" data-detay="${u.id}" ${ek}><img src="${u.gorsel}" alt="${kacir(u.ad)}" loading="lazy"></div>`;
     const s = SAHNE.find(([r]) => r.test(u.ad));
-    if (s) return `<div class="foto sahne" data-detay="${u.id}" ${ek}><img src="gorsel/${s[1]}.jpg" style="object-position:${s[2]}" alt="${kacir(u.ad)}" loading="lazy"></div>`;
+    if (s) return `<div class="foto sahne" data-detay="${u.id}" ${ek}><img src="gorsel/${s[1]}.webp" style="object-position:${s[2]}" alt="${kacir(u.ad)}" loading="lazy"></div>`;
     return `<div class="foto" data-detay="${u.id}" ${ek}><span class="etiket" style="color:var(--ink-3)">Görsel yakında</span></div>`;
   };
 
@@ -112,9 +112,9 @@
 
   // Ana sayfa vitrini: çeşitler + öne çıkan 5 ürün
   const CESIT = [
-    { k: "ysc", ad: "Söndürücüler", ac: "KKT, CO₂, köpüklü, pano tipi, sprinkli ve davlumbaz; 1 kg'dan 50 kg'a.", img: "gorsel/T4-otel-tuplu.jpg", odak: "52% 40%", c: ["KKT", "CO₂", "Köpüklü", "Pano tipi"] },
-    { k: "yangin", ad: "Yangın güvenliği", ac: "Dedektör, ihbar butonu, yangın dolabı, yangın kapısı ve acil aydınlatma.", img: "gorsel/I08-dolap.jpg", odak: "72% 50%", c: ["Dedektör", "Buton", "Dolap", "Kapı"] },
-    { k: "kantar", ad: "Tartı sistemleri", ac: "Tır kantarından hassas teraziye; CAS baskül, terazi ve indikatörler.", img: "gorsel/K2-market.jpg", odak: "88% 50%", c: ["Baskül", "Terazi", "İndikatör"] },
+    { k: "ysc", ad: "Söndürücüler", ac: "KKT, CO₂, köpüklü, pano tipi, sprinkli ve davlumbaz; 1 kg'dan 50 kg'a.", img: "gorsel/T4-otel-tuplu.webp", odak: "52% 40%", c: ["KKT", "CO₂", "Köpüklü", "Pano tipi"] },
+    { k: "yangin", ad: "Yangın güvenliği", ac: "Dedektör, ihbar butonu, yangın dolabı, yangın kapısı ve acil aydınlatma.", img: "gorsel/I08-dolap.webp", odak: "72% 50%", c: ["Dedektör", "Buton", "Dolap", "Kapı"] },
+    { k: "kantar", ad: "Tartı sistemleri", ac: "Tır kantarından hassas teraziye; CAS baskül, terazi ve indikatörler.", img: "gorsel/K2-market.webp", odak: "88% 50%", c: ["Baskül", "Terazi", "İndikatör"] },
   ];
   // Öne çıkanlar: katmanlı vitrin kartı (Kabarza "depth map" örneği). Mekân fotoğrafı ve büyük yazı pencereye kırpılır, ürün
   // kırpılmaz: imleçle katmanlar farklı derinlikte kayar, üstüne gelince ürün öne çıkıp pencerenin dışına taşar.
@@ -126,7 +126,7 @@
     { ad: "CAS DB-I tartım baskülü 30–600 kg", zemin: "T5-fabrika-yatay-bos", odak: "22% 60%", yazi: "600 kg" },
   ].map((x) => ({ ...x, u: [...URUN.values()].find((u) => u.ad === x.ad) })).filter((x) => x.u && x.u.gorsel);
   const vitrinKart = ({ u, zemin, odak, yazi }, i) => `<article class="vk ${u.bolum === "kantar" ? "tarti" : ""}" style="--i:${i}">
-    <div class="vk-sahne" data-detay="${u.id}"><div class="vk-pencere"><img class="vk-zemin" src="gorsel/${zemin}.jpg" style="object-position:${odak}" alt="" loading="lazy"><span class="vk-yazi">${yazi}</span></div>
+    <div class="vk-sahne" data-detay="${u.id}"><div class="vk-pencere"><img class="vk-zemin" src="gorsel/${zemin}.webp" style="object-position:${odak}" alt="" loading="lazy"><span class="vk-yazi">${yazi}</span></div>
       <img class="vk-urun" src="${u.gorsel}" alt="${kacir(u.ad)}" loading="lazy"><span class="vk-isik"></span></div>
     <div class="vk-alt"><p class="tur">${kacir(u.alt_tur || (u.bolum === "ysc" ? (AILELER.find((a) => a.urunler.includes(u)) || {}).ad : u.marka) || "")}</p><h4 data-detay="${u.id}">${kacir(u.ad)}</h4>
       <div class="fiyat-satir">${fiyatAl(u)}</div></div></article>`;

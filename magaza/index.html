@@ -12,7 +12,10 @@
 <meta property="og:title" content="Yangın Tüpü ve Terazi Modelleri | Kaptan Yangın">
 <meta property="og:url" content="https://7kaptan.com/magaza/">
 <meta property="og:locale" content="tr_TR">
-<meta property="og:image" content="https://7kaptan.com/magaza/kaptan-logo.png">
+<meta property="og:image" content="https://7kaptan.com/varlik/paylasim.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Urbanist:wght@200;300;400;500&family=Geist:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="katalog-tema.css">
@@ -633,7 +636,7 @@ const YAZI_AILE = { kkt: 'KKT', tavan: 'KKT', co2: 'CO₂', kopuk: 'Köpük', pa
 const zeminKart = (u) => u.bolum === 'kantar'
 	? (/hassas/i.test(u.alt_tur ?? u.ad) ? ['K3-hassas', '20% 50%'] : /terazi/i.test(u.alt_tur ?? u.ad) ? ['K2-market', '0% 55%'] : /tır|kamyon|kantar/i.test(u.alt_tur ?? u.ad) ? ['I14-kantar-hava', '60% 60%'] : /indikat/i.test(u.alt_tur ?? u.ad) ? ['K6-tezgah', '20% 50%'] : ['T5-fabrika-yatay-bos', '22% 60%'])
 	: tupMu(u) ? ['T4-otel-yatay-bos', '50% 45%'] : (/dedekt/i.test(u.ad) ? ['I05-dedektor', '60% 20%'] : /dolab/i.test(u.ad) ? ['I08-dolap', '80% 50%'] : /kapı/i.test(u.ad) ? ['I09-kapi', '70% 45%'] : ['I07-panel', '80% 50%']);
-const pencereHtml = ([g, odak], yazi) => `<span class="pencere" aria-hidden="true"><img class="zemin" src="../gorsel/${g}.jpg" style="object-position:${odak}" alt="" loading="lazy"><span class="yazi">${kacir(yazi)}</span></span>`;
+const pencereHtml = ([g, odak], yazi) => `<span class="pencere" aria-hidden="true"><img class="zemin" src="../gorsel/${g}.webp" style="object-position:${odak}" alt="" loading="lazy"><span class="yazi">${kacir(yazi)}</span></span>`;
 function kartHtml(u) {
 	const tabak = !u.gorsel ? `<div class="tabak ikon">${ik(ikonu(u))}</div>` : `<div class="tabak derin ${tupMu(u) ? 'koyu' : 'acik'}">${pencereHtml(zeminKart(u), kapasite(u) ?? '')}${tupcuk(u, `<img src="${kacir(src(u))}" alt="${kacir(u.ad)}" loading="lazy" data-g="${u.id}">`)}</div>`;
 	return `<a class="kart" href="#u-${u.id}" data-git="u-${u.id}">${tabak}<h3>${kacir(u.ad)}</h3><span class="kunye">${kacir(kunye(u))}</span><span class="fiyat fiyat-al">Fiyat al →</span></a>`;

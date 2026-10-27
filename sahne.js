@@ -63,11 +63,11 @@ const videoDurak = (p, D, bekle = 34) => {
 const duraklı = (p, n, bekle = .28) => { const t = p * (n - 1), i = Math.min(n - 2, Math.floor(t)), f = t - i; return n < 2 ? 0 : i + yumus(sinir((f - bekle) / (1 - 2 * bekle))); };
 const etkin = (adimlar, i) => adimlar.forEach((a, j) => a.classList.toggle("acik", j === i));
 const cip = (c) => `<div class="cipler">${c.map((x) => `<span>${x}</span>`).join("")}</div>`;
-const mekanResmi = (m, ek = "") => `<div class="mekan ${ek}"><picture><source media="(max-aspect-ratio: 1/1)" srcset="gorsel/${m.img}-dikey-bos.jpg"><img src="gorsel/${m.img}-yatay-bos.jpg" alt=""></picture></div>`;
+const mekanResmi = (m, ek = "") => `<div class="mekan ${ek}"><picture><source media="(max-aspect-ratio: 1/1)" srcset="gorsel/${m.img}-dikey-bos.webp"><img src="gorsel/${m.img}-yatay-bos.webp" alt=""></picture></div>`;
 
 // ---------- Kurulum ----------
 // her kare bir katman: katmanlar sırayla soldan kayarak gelir. Son katman (mekân) + perdenin üstündeki tüp = kurumlar sahnesinin ilk karesi.
-$("#yangin-katlar").innerHTML = YANGIN.map((y, i) => `<div class="katman"><img class="kat" src="gorsel/${y.img}.jpg" alt="" ${i > 1 ? 'loading="lazy"' : ""}></div>`).join("");
+$("#yangin-katlar").innerHTML = YANGIN.map((y, i) => `<div class="katman"><img class="kat" src="gorsel/${y.img}.webp" alt="" ${i > 1 ? 'loading="lazy"' : ""}></div>`).join("");
 $("#ray").style.gridTemplateColumns = `repeat(${YANGIN.length}, minmax(0, 1fr))`;
 // kare görsel: masaüstünde ürün kartın dikey ortasında ve kendi yatay yerinde, telefonda ortada ve üst üçte birde (kesilmeden)
 function yanginYerlestir() {
@@ -97,7 +97,7 @@ $("#mekanlar").innerHTML = MEKAN.map((m) => `<div class="katman">${mekanResmi(m)
 $("#mekan-metin").innerHTML = MEKAN.map((m, i) => `<div class="adim ${i ? "" : "acik"}"><h2 class="baslik bol">${m.h}</h2><p class="giris">${m.p}</p><a class="katalog-bag" href="magaza/index.html#ysc" style="margin-top:22px">Söndürücüleri gör →</a></div>`).join("");
 $("#mekan-liste").innerHTML = MEKAN.map((m, i) => `<span class="${i ? "" : "on"}">${m.ad}</span>`).join("");
 
-$("#kantar-katlar").innerHTML = KANTAR.map((k) => `<img class="kat" src="gorsel/${k.img}.jpg" style="--odak:${k.odak}" alt="" loading="lazy">`).join("");
+$("#kantar-katlar").innerHTML = KANTAR.map((k) => `<img class="kat" src="gorsel/${k.img}.webp" style="--odak:${k.odak}" alt="" loading="lazy">`).join("");
 $("#kantar-metin").innerHTML = KANTAR.map((k, i) => `<div class="adim ${i ? "" : "acik"}"><p class="etiket">${k.e}</p><h2 class="baslik bol">${k.h}</h2><p class="giris">${k.p}</p>${cip(k.c)}${i === 0 ? '<a class="dugme koyu-d" href="magaza/index.html#kantar">Tartı ürünleri</a>' : ""}</div>`).join("");
 $("#kantar-liste").innerHTML = KANTAR.map((k, i) => `<span class="${i ? "" : "on"}">${k.ad}</span>`).join("");
 
@@ -223,7 +223,7 @@ let nedenAktif = 0, nedenZaman = [];
 if (neden) {
   $("#maddeler").innerHTML = NEDEN.map((m, i) => `<article class="madde" data-i="${i}"><div class="madde-bas"><span class="no">0${i + 1}</span><h3>${m.h}</h3></div>
     <p class="okuma">${m.p.split(" ").map((k) => `<span class="kel">${[...k].map((h) => `<span class="h">${h}</span>`).join("")}</span>`).join(" ")}</p></article>`).join("");
-  $("#panel").innerHTML = NEDEN.map((m, i) => `<div class="p-kat ${i ? "" : "gorunur"}" style="--odak:${m.odak[0] * 100}% ${m.odak[1] * 100}%"><img class="p-taban" src="gorsel/${m.img}.jpg" alt=""><img class="p-cizgi" src="gorsel/cizgi/${m.img}.webp" alt=""><img class="p-gercek" src="gorsel/${m.img}.jpg" alt=""></div>`).join("")
+  $("#panel").innerHTML = NEDEN.map((m, i) => `<div class="p-kat ${i ? "" : "gorunur"}" style="--odak:${m.odak[0] * 100}% ${m.odak[1] * 100}%"><img class="p-taban" src="gorsel/${m.img}.webp" alt=""><img class="p-cizgi" src="gorsel/cizgi/${m.img}.webp" alt=""><img class="p-gercek" src="gorsel/${m.img}.webp" alt=""></div>`).join("")
     + `<span class="p-tarama"></span><span class="p-kutu"><em></em></span><span class="p-hud"></span>`;
 }
 // HUD yazısı harf harf; o an yazılan harf vurgu renginde (Terminal'deki gibi)

@@ -16,7 +16,7 @@
     <div class="kk-ust"><div class="kk-sekmeler" role="tablist">${KART.map((k, i) => `<button type="button" role="tab" data-i="${i}">${k.s}</button>`).join("")}</div>
       <div class="kk-oklar"><button type="button" data-yon="-1" aria-label="Önceki">‹</button><button type="button" data-yon="1" aria-label="Sonraki">›</button></div></div>
     <div class="kk-pencere"><div class="kk-ray">${KART.map((k, i) => `<article class="kk-kart ${k.renk}" data-i="${i}">
-      <img src="gorsel/${k.img}.jpg" style="object-position:${k.odak}" alt="" loading="lazy">
+      <img src="gorsel/${k.img}.webp" style="object-position:${k.odak}" alt="" loading="lazy">
       <div class="kk-yazi"><p class="kk-etiket">${k.s}</p><h3>${k.h}</h3><p class="kk-ac">${k.p}</p></div>
       <a class="kk-dugme" href="${k.bag}">Daha fazla</a></article>`).join("")}</div></div></div>`;
   const ray = kap.querySelector(".kk-ray"), kartlar = [...ray.children], sekmeler = [...kap.querySelectorAll(".kk-sekmeler button")];
